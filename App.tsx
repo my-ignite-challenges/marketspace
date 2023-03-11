@@ -1,4 +1,4 @@
-import { Box, NativeBaseProvider } from "native-base";
+import { Box, NativeBaseProvider, StatusBar } from "native-base";
 import {
   useFonts,
   Karla_300Light,
@@ -8,6 +8,7 @@ import {
 
 import { Loading } from "./src/components/Loading";
 import { THEME } from "./src/theme";
+import { SignIn } from "./src/screens/SignIn";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -18,13 +19,12 @@ export default function App() {
 
   return (
     <NativeBaseProvider theme={THEME}>
-      {fontsLoaded ? (
-        <Box flex={1} alignItems="center" justifyContent="center">
-          Hello, Marketspot!!
-        </Box>
-      ) : (
-        <Loading />
-      )}
+      <StatusBar
+        backgroundColor="transparent"
+        translucent
+        barStyle="dark-content"
+      />
+      {fontsLoaded ? <SignIn /> : <Loading />}
     </NativeBaseProvider>
   );
 }

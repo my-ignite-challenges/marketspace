@@ -1,0 +1,26 @@
+import {
+  Button as NativeBaseButton,
+  Icon,
+  IButtonProps,
+  Text,
+} from "native-base";
+
+type Props = IButtonProps & {
+  title: string;
+  textColor?: string;
+};
+
+export function Button({ textColor = "gray.100", title, ...props }: Props) {
+  return (
+    <NativeBaseButton
+      h="42px"
+      {...props}
+      fontFamily="heading"
+      borderBottomRadius="6px"
+    >
+      <Text color={textColor} fontFamily="heading">
+        {title}
+      </Text>
+    </NativeBaseButton>
+  );
+}
