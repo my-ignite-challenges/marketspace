@@ -1,20 +1,30 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Box, NativeBaseProvider } from "native-base";
+import {
+  useFonts,
+  Karla_300Light,
+  Karla_400Regular,
+  Karla_700Bold,
+} from "@expo-google-fonts/karla";
+
+import { Loading } from "./src/components/Loading";
+import { THEME } from "./src/theme";
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    Karla_300Light,
+    Karla_400Regular,
+    Karla_700Bold,
+  });
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NativeBaseProvider theme={THEME}>
+      {fontsLoaded ? (
+        <Box flex={1} alignItems="center" justifyContent="center">
+          Hello, Marketspot!!
+        </Box>
+      ) : (
+        <Loading />
+      )}
+    </NativeBaseProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
