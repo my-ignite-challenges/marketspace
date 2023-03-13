@@ -15,7 +15,7 @@ export function SingInForm() {
           <Icon
             as={<Ionicons name="eye-outline" />}
             size={5}
-            mr="2"
+            mr={3}
             color="gray.500"
           />
         }
