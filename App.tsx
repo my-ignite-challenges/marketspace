@@ -1,4 +1,4 @@
-import { Box, NativeBaseProvider, StatusBar } from "native-base";
+import { NativeBaseProvider, StatusBar } from "native-base";
 import {
   useFonts,
   Karla_300Light,
@@ -9,6 +9,7 @@ import {
 import { Loading } from "./src/components/Loading";
 import { THEME } from "./src/theme";
 import { SignIn } from "./src/screens/SignIn";
+import { SignUp } from "./src/screens/SignUp";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -24,7 +25,7 @@ export default function App() {
         translucent
         barStyle="dark-content"
       />
-      {fontsLoaded ? <SignIn /> : <Loading />}
+      {fontsLoaded ? <SignUp /> : <Loading />}
     </NativeBaseProvider>
   );
 }
