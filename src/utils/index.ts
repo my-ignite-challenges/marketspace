@@ -52,3 +52,26 @@ export const ads: AdProps[] = [
     isNew: false,
   },
 ];
+
+export const paymentMethods = [
+  {
+    id: "1",
+    label: "Boleto",
+  },
+  {
+    id: "2",
+    label: "Pix",
+  },
+  {
+    id: "3",
+    label: "Dinheiro",
+  },
+  {
+    id: "4",
+    label: "Cartão de Crédito",
+  },
+  {
+    id: "5",
+    label: "Depósito Bancário",
+  },
+];

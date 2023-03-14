@@ -1,5 +1,4 @@
-import { TouchableOpacity } from "react-native";
-import { Box, HStack, Image, Pressable, Text, View, VStack } from "native-base";
+import { Box, HStack, Image, Pressable, Text, VStack } from "native-base";
 
 import { Avatar } from "./Avatar";
 

@@ -3,9 +3,14 @@ import { Feather } from "@expo/vector-icons";
 
 import FilterIcon from "../assets/filter-icon.png";
 
+import { useState } from "react";
+
 import { Input } from "./Input";
+import { Filter } from "./Filter";
 
 function InputButtons() {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <HStack alignItems="center" space={3} mr={3}>
       <Pressable>
@@ -17,9 +22,13 @@ function InputButtons() {
         h="18px"
         bgColor="gray.400"
       />
-      <Pressable alignItems="center">
+      <Pressable alignItems="center" onPress={() => setShowModal(true)}>
         <Image source={FilterIcon} alt="Ícone de Filtro" />
       </Pressable>
+
+      {showModal && (
+        <Filter showModal={showModal} setShowModal={setShowModal} />
+      )}
     </HStack>
   );
 }
