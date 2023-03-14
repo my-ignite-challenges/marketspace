@@ -1,4 +1,4 @@
-import { Box, FlatList, VStack } from "native-base";
+import { FlatList, VStack } from "native-base";
 import { ads } from "../utils";
 import { Ad } from "./Ad";
 

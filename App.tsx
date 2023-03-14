@@ -1,3 +1,5 @@
+import { LogBox } from "react-native";
+
 import { NativeBaseProvider, StatusBar } from "native-base";
 import {
   useFonts,
@@ -11,7 +13,7 @@ import { THEME } from "./src/theme";
 import { SignIn } from "./src/screens/SignIn";
 import { SignUp } from "./src/screens/SignUp";
 import { Home } from "./src/screens/Home";
-import { LogBox } from "react-native";
+import { AdDetails } from "./src/screens/AdDetails";
 
 LogBox.ignoreLogs([
   "We can not support a function callback. See Github Issues for details https://github.com/adobe/react-spectrum/issues/2320",
@@ -31,7 +33,7 @@ export default function App() {
         translucent
         barStyle="dark-content"
       />
-      {fontsLoaded ? <Home /> : <Loading />}
+      {fontsLoaded ? <AdDetails /> : <Loading />}
     </NativeBaseProvider>
   );
 }

@@ -1,11 +1,18 @@
-import { Text, View } from "native-base";
+import { IBadgeProps, Text, View } from "native-base";
+import { IViewProps } from "native-base/lib/typescript/components/basic/View/types";
 
-type Props = {
+type Props = IViewProps & {
   title: string;
   bgColor: string;
+  textColor?: string;
 };
 
-export function Badge({ title, bgColor }: Props) {
+export function Badge({
+  title,
+  textColor = "gray.100",
+  bgColor,
+  ...props
+}: Props) {
   return (
     <View
       p={0}
@@ -15,11 +22,9 @@ export function Badge({ title, bgColor }: Props) {
       rounded="xl"
       alignItems="center"
       justifyContent="center"
-      position="absolute"
-      top={1}
-      right={1}
+      {...props}
     >
-      <Text color="gray.100" fontSize="2xs" fontFamily="heading">
+      <Text color={textColor} fontSize="2xs" fontFamily="heading">
         {title.toUpperCase()}
       </Text>
     </View>

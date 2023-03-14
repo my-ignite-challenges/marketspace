@@ -29,9 +29,9 @@ export function Ad({ data, index }: Props) {
           <Image
             source={data.image}
             alt="Imagem do Produto"
-            flex={1}
             w="full"
-            resizeMode="cover"
+            h="100px"
+            resizeMode="contain"
             rounded="md"
           />
           <Avatar
@@ -46,6 +46,9 @@ export function Ad({ data, index }: Props) {
           <Badge
             title={data.isNew ? "Novo" : "Usado"}
             bgColor={data.isNew ? "blue.700" : "gray.600"}
+            position="absolute"
+            top={1}
+            right={1}
           />
         </Box>
         <VStack w="full" mt={1}>
