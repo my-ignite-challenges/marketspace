@@ -18,6 +18,7 @@ export const ads: AdProps[] = [
     title: "Tênis Vermelho",
     price: "59.90",
     isNew: false,
+    isInactive: false,
   },
   {
     id: "2",
@@ -26,6 +27,7 @@ export const ads: AdProps[] = [
     title: "Tênis Vermelho",
     price: "59.90",
     isNew: true,
+    isInactive: false,
   },
   {
     id: "3",
@@ -34,6 +36,7 @@ export const ads: AdProps[] = [
     title: "Tênis Vermelho",
     price: "59.90",
     isNew: false,
+    isInactive: false,
   },
   {
     id: "4",
@@ -42,6 +45,7 @@ export const ads: AdProps[] = [
     title: "Tênis Vermelho",
     price: "59.90",
     isNew: true,
+    isInactive: false,
   },
   {
     id: "5",
@@ -50,6 +54,7 @@ export const ads: AdProps[] = [
     title: "Tênis Vermelho",
     price: "59.90",
     isNew: true,
+    isInactive: true,
   },
   {
     id: "6",
@@ -58,6 +63,7 @@ export const ads: AdProps[] = [
     title: "Tênis Vermelho",
     price: "59.90",
     isNew: false,
+    isInactive: true,
   },
 ];
 

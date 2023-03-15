@@ -10,9 +10,10 @@ import { Badge } from "./Badge";
 type Props = {
   data: AdProps;
   index: number;
+  showAvatar?: boolean;
 };
 
-export function Ad({ data, index }: Props) {
+export function Ad({ data, index, showAvatar = true }: Props) {
   return (
     <Pressable
       _pressed={{
@@ -34,15 +35,17 @@ export function Ad({ data, index }: Props) {
             resizeMode="contain"
             rounded="md"
           />
-          <Avatar
-            source={adImage}
-            position="absolute"
-            top={1}
-            left={1}
-            size={8}
-            borderWidth={1}
-            borderColor="gray.100"
-          />
+          {showAvatar && (
+            <Avatar
+              source={adImage}
+              position="absolute"
+              top={1}
+              left={1}
+              size={8}
+              borderWidth={1}
+              borderColor="gray.100"
+            />
+          )}
           <Badge
             title={data.isNew ? "Novo" : "Usado"}
             bgColor={data.isNew ? "blue.700" : "gray.600"}
@@ -50,14 +53,49 @@ export function Ad({ data, index }: Props) {
             top={1}
             right={1}
           />
+          {data.isInactive && (
+            <>
+              <Text
+                color="gray.100"
+                fontFamily="heading"
+                fontSize="11px"
+                position="absolute"
+                bottom={1}
+                left={1}
+                zIndex={2}
+              >
+                ANÚNCIO DESATIVADO
+              </Text>
+              <Box
+                w="full"
+                h="100px"
+                bgColor="rgba(0, 0, 0, 0.4)"
+                rounded="md"
+                position="absolute"
+                top={0}
+                left={0}
+                zIndex={1}
+              />
+            </>
+          )}
         </Box>
         <VStack w="full" mt={1}>
-          <Text color="gray.600">Tênis Vermelho</Text>
+          <Text color={data.isInactive ? "gray.400" : "gray.600"}>
+            Tênis Vermelho
+          </Text>
           <HStack alignItems="center" space={1}>
-            <Text color="gray.700" fontSize="xs" fontFamily="heading">
+            <Text
+              color={data.isInactive ? "gray.400" : "gray.700"}
+              fontSize="xs"
+              fontFamily={data.isInactive ? "body" : "heading"}
+            >
               R$
             </Text>
-            <Text color="gray.700" fontSize="md" fontFamily="heading">
+            <Text
+              color={data.isInactive ? "gray.400" : "gray.700"}
+              fontSize="md"
+              fontFamily={data.isInactive ? "body" : "heading"}
+            >
               59,90
             </Text>
           </HStack>

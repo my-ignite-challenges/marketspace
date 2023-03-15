@@ -5,4 +5,5 @@ export type AdProps = {
   title: string;
   price: string;
   isNew: boolean;
+  isInactive: boolean;
 };
