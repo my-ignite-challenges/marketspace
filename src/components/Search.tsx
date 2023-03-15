@@ -1,12 +1,12 @@
-import { Box, Divider, HStack, Icon, Image, Pressable } from "native-base";
-import { Feather } from "@expo/vector-icons";
-
-import FilterIcon from "../assets/filter-icon.png";
-
 import { useState } from "react";
+
+import { Divider, HStack, Icon, Image, Pressable } from "native-base";
+import { Feather } from "@expo/vector-icons";
 
 import { Input } from "./Input";
 import { Filter } from "./Filter";
+
+import FilterIcon from "../assets/filter-icon.png";
 
 function InputButtons() {
   const [showModal, setShowModal] = useState(false);

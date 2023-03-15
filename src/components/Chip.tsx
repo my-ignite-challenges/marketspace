@@ -1,4 +1,4 @@
-import { HStack, Icon, IconButton, Pressable, Text } from "native-base";
+import { HStack, Icon, Pressable, Text } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 
 type Props = {

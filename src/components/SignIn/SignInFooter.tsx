@@ -1,4 +1,5 @@
 import { Text, VStack } from "native-base";
+
 import { Button } from "../Button";
 
 export function SignInFooter() {

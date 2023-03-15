@@ -12,11 +12,11 @@ import {
 } from "native-base";
 import { Feather } from "@expo/vector-icons";
 
-import adImage from "../assets/bike.png";
 import { Avatar } from "../components/Avatar";
 import { Badge } from "../components/Badge";
 import { paymentMethods } from "../utils";
 
+import adImage from "../assets/bike.png";
 import WhatsappIcon from "../assets/whatsapp-icon.png";
 
 export function AdDetails() {

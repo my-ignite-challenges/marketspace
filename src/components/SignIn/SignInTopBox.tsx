@@ -1,7 +1,8 @@
 import { Image, VStack } from "native-base";
 
-import Logo from "../../assets/logo.png";
 import { SingInForm } from "./SignInForm";
+
+import Logo from "../../assets/logo.png";
 
 export function SignInTopBox() {
   return (

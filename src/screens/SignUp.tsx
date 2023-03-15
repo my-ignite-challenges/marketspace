@@ -1,13 +1,4 @@
-import {
-  Box,
-  Icon,
-  IconButton,
-  Image,
-  Pressable,
-  ScrollView,
-  Text,
-  VStack,
-} from "native-base";
+import { Image, ScrollView, Text, VStack } from "native-base";
 
 import { Button } from "../components/Button";
 import { SignUpForm } from "../components/SignUp/SignUpForm";

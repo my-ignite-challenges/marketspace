@@ -1,11 +1,11 @@
 import { Box, HStack, Image, Pressable, Text, VStack } from "native-base";
 
 import { Avatar } from "./Avatar";
-
-import adImage from "../assets/ad-image.png";
+import { Badge } from "./Badge";
 
 import { AdProps } from "../@types";
-import { Badge } from "./Badge";
+
+import adImage from "../assets/ad-image.png";
 
 type Props = {
   data: AdProps;

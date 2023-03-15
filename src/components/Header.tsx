@@ -1,5 +1,6 @@
-import { Box, HStack, Icon, Pressable, Text } from "native-base";
 import { ReactNode } from "react";
+
+import { Box, HStack, Pressable, Text } from "native-base";
 
 type Props = {
   title?: ReactNode;

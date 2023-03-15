@@ -1,4 +1,5 @@
 import { FlatList, VStack } from "native-base";
+
 import { ads } from "../utils";
 import { Ad } from "./Ad";
 

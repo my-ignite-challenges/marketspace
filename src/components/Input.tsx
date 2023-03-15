@@ -1,9 +1,4 @@
-import {
-  IInputProps,
-  Input as NativeBaseInput,
-  theme,
-  useTheme,
-} from "native-base";
+import { IInputProps, Input as NativeBaseInput, useTheme } from "native-base";
 
 type Props = IInputProps & {};
 

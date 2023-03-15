@@ -1,19 +1,11 @@
 import { useState } from "react";
 
-import {
-  FlatList,
-  FormControl,
-  HStack,
-  Select,
-  Text,
-  useTheme,
-  VStack,
-} from "native-base";
+import { FlatList, HStack, Select, Text, useTheme, VStack } from "native-base";
 import { CaretDown, Plus } from "phosphor-react-native";
 
 import { Header } from "../components/Header";
-import { ads } from "../utils";
 import { Ad } from "../components/Ad";
+import { ads } from "../utils";
 
 export function MyAds() {
   const [selectedAdFilter, setSelectedAdFilter] = useState("todos");

@@ -1,4 +1,4 @@
-import { IBadgeProps, Text, View } from "native-base";
+import { Text, View } from "native-base";
 import { IViewProps } from "native-base/lib/typescript/components/basic/View/types";
 
 type Props = IViewProps & {
