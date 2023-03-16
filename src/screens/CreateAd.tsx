@@ -108,11 +108,7 @@ export function CreateAd() {
                 }}
                 colorScheme="brand"
               >
-                <HStack
-                  w="full"
-                  alignItems="center"
-                  justifyContent="space-between"
-                >
+                <HStack w="full" alignItems="center" space={8}>
                   <Radio value="novo">Produto novo</Radio>
                   <Radio value="usado">Produto usado</Radio>
                 </HStack>
