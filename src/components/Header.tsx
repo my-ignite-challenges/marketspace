@@ -1,14 +1,15 @@
 import { ReactNode } from "react";
 
 import { Box, HStack, Pressable, Text } from "native-base";
+import { IHStackProps } from "native-base/lib/typescript/components/primitives/Stack/HStack";
 
-type Props = {
+type Props = IHStackProps & {
   title?: ReactNode;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
 };
 
-export function Header({ leftIcon, rightIcon, title }: Props) {
+export function Header({ leftIcon, rightIcon, title, ...props }: Props) {
   return (
     <HStack
       w="full"
@@ -17,6 +18,7 @@ export function Header({ leftIcon, rightIcon, title }: Props) {
       alignItems="center"
       mt={16}
       mb={8}
+      {...props}
     >
       <Pressable _pressed={{ opacity: 0.8 }}>
         {leftIcon ? leftIcon : <Box w={6} h={6} />}

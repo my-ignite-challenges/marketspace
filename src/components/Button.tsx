@@ -12,6 +12,9 @@ export function Button({ textColor = "gray.100", title, ...props }: Props) {
       {...props}
       fontFamily="heading"
       borderRadius="6px"
+      _pressed={{
+        opacity: 0.8,
+      }}
     >
       <Text color={textColor} fontFamily="heading">
         {title}

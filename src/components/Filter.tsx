@@ -82,14 +82,7 @@ export function Filter({ showModal, setShowModal }: Props) {
                 value={method.label}
                 my={2}
                 key={method.id}
-                bgColor="blue.500"
-                borderColor="blue.500"
-                _checked={{
-                  borderColor: "transparent",
-                }}
-                _pressed={{
-                  borderColor: "transparent",
-                }}
+                colorScheme="brand"
               >
                 <Text color="gray.600" fontSize="md">
                   {method.label}
