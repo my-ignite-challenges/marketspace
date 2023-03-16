@@ -5,7 +5,7 @@ import { Badge } from "./Badge";
 
 import { AdProps } from "../@types";
 
-import adImage from "../assets/ad-image.png";
+import adImage from "../assets/bike.png";
 
 type Props = {
   data: AdProps;
