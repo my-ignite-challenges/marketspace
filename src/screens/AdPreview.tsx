@@ -84,7 +84,6 @@ export function AdPreview() {
         bgColor="gray.100"
         alignItems="center"
         justifyContent="space-between"
-        // mt={6}
         px={6}
       >
         <NativeBaseButton bgColor="gray.300" w="48%">

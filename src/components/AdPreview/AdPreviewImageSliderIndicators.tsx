@@ -13,8 +13,6 @@ export function AdPreviewImageSliderIndicators({
 }: Props) {
   const images = Array(numberOfImages).fill("");
 
-  console.log(currentImageIndex);
-
   return (
     <HStack
       position="absolute"
