@@ -39,10 +39,15 @@ export function AdPreview() {
         px={6}
       >
         <VStack mt={12}>
-          <Text color="gray.100" fontFamily="heading" fontSize="md">
+          <Text
+            color="gray.100"
+            fontFamily="heading"
+            fontSize="md"
+            textAlign="center"
+          >
             Pré visualização do anúncio
           </Text>
-          <Text color="gray.100">É assim que seu produto vai aparecer</Text>
+          <Text color="gray.100">É assim que seu produto vai aparecer!</Text>
         </VStack>
       </VStack>
 
