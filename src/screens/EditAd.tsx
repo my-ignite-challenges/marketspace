@@ -1,5 +1,5 @@
 import { AdForm } from "../components/AdForm";
 
-export function CreateAd() {
+export function EditAd() {
   return <AdForm />;
 }

@@ -1,11 +1,24 @@
-import { Button as NativeBaseButton, IButtonProps, Text } from "native-base";
+import { ReactNode } from "react";
+
+import {
+  Button as NativeBaseButton,
+  HStack,
+  IButtonProps,
+  Text,
+} from "native-base";
 
 type Props = IButtonProps & {
+  icon?: ReactNode;
   title: string;
   textColor?: string;
 };
 
-export function Button({ textColor = "gray.100", title, ...props }: Props) {
+export function Button({
+  icon,
+  textColor = "gray.100",
+  title,
+  ...props
+}: Props) {
   return (
     <NativeBaseButton
       h="42px"
@@ -16,9 +29,12 @@ export function Button({ textColor = "gray.100", title, ...props }: Props) {
         opacity: 0.8,
       }}
     >
-      <Text color={textColor} fontFamily="heading">
-        {title}
-      </Text>
+      <HStack space={2} alignItems="center" justifyContent="center">
+        {icon}
+        <Text color={textColor} fontFamily="heading">
+          {title}
+        </Text>
+      </HStack>
     </NativeBaseButton>
   );
 }

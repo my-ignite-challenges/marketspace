@@ -6,7 +6,7 @@ type Props = IHStackProps & {
   currentImageIndex: number;
 };
 
-export function AdPreviewImageSliderIndicators({
+export function AdImageSliderIndicators({
   numberOfImages,
   currentImageIndex,
   ...props

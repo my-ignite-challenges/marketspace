@@ -1,32 +1,18 @@
-import { useState } from "react";
-import { Dimensions } from "react-native";
-
 import {
-  Box,
   Button as NativeBaseButton,
   HStack,
-  Image,
   ScrollView,
   Text,
   useTheme,
   VStack,
 } from "native-base";
 import { ArrowLeft, Tag } from "phosphor-react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import Carousel from "react-native-reanimated-carousel";
 
 import { AdDescription } from "../components/AdDescription";
-import { AdPreviewImageSliderIndicators } from "../components/AdPreview/AdPreviewImageSliderIndicators";
-
-import { ads } from "../utils";
+import { AdImageSlider } from "../components/AdImageSlider/AdImageSlider";
 
 export function AdPreview() {
-  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
-
   const { colors } = useTheme();
-
-  const width = Dimensions.get("screen").width;
-  const images = ads.map((ad) => ad.image).slice(0, 3);
 
   return (
     <VStack bgColor="gray.200" flex={1}>
@@ -52,34 +38,7 @@ export function AdPreview() {
       </VStack>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <GestureHandlerRootView>
-          <Carousel
-            width={width}
-            height={280}
-            data={images}
-            scrollAnimationDuration={500}
-            onSnapToItem={(index) => setCurrentImageIndex(index)}
-            renderItem={({ item }) => (
-              <Box position="relative" h="full">
-                <Image
-                  w={width}
-                  source={item}
-                  flex={1}
-                  resizeMode="cover"
-                  alt="Imagem do anúncio"
-                />
-                <AdPreviewImageSliderIndicators
-                  numberOfImages={images.length}
-                  position="absolute"
-                  bottom={1}
-                  left={1}
-                  currentImageIndex={currentImageIndex}
-                />
-              </Box>
-            )}
-          />
-        </GestureHandlerRootView>
-
+        <AdImageSlider />
         <AdDescription />
       </ScrollView>
 

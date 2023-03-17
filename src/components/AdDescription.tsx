@@ -1,5 +1,6 @@
-import { Avatar, HStack, Text, useTheme, VStack } from "native-base";
+import { HStack, Text, useTheme, VStack } from "native-base";
 
+import { Avatar } from "./Avatar";
 import { Badge } from "./Badge";
 import { paymentMethods } from "../utils";
 
@@ -10,7 +11,7 @@ export function AdDescription() {
   return (
     <VStack px={6}>
       <HStack space={2} alignItems="center" mt={5}>
-        <Avatar source={adImage} size={8} />
+        <Avatar source={adImage} size={8} borderWidth="2px" />
         <Text color="gray.700">Makenna Baptista</Text>
       </HStack>
 
