@@ -1,3 +1,4 @@
+import { useRoute } from "@react-navigation/native";
 import {
   Box,
   Button as NativeBaseButton,
@@ -10,14 +11,9 @@ import {
 import { ArrowLeft } from "phosphor-react-native";
 
 import { AdDetailsBody } from "../components/AdDetailsBody";
-import { Avatar } from "../components/Avatar";
-import { Badge } from "../components/Badge";
 import { Header } from "../components/Header";
 
-import { paymentMethods } from "../utils";
-
 import whatsappIcon from "../assets/whatsapp-icon.png";
-import { useRoute } from "@react-navigation/native";
 
 type RouteParams = {
   adId: string;

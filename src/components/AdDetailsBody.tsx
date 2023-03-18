@@ -1,17 +1,4 @@
-import React, { ReactNode } from "react";
-
-import {
-  Box,
-  Button as NativeBaseButton,
-  HStack,
-  Icon,
-  Image,
-  Pressable,
-  ScrollView,
-  Text,
-  useTheme,
-} from "native-base";
-import { Feather } from "@expo/vector-icons";
+import { ScrollView } from "native-base";
 
 import { AdDescription } from "./AdDescription";
 
