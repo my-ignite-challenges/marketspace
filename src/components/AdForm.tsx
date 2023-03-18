@@ -26,15 +26,7 @@ export function AdForm() {
   const [productCondition, setProductCondition] = useState("");
   const [selectedPaymentMethods, setSelectedPaymentMethods] = useState([]);
 
-  const data = {
-    id: "1",
-    image: adImage,
-    ownerAvatar: "",
-    title: "Tênis Vermelho",
-    price: "59.90",
-    isNew: false,
-    isInactive: true,
-  } as any;
+  const data = {} as any;
 
   const { colors } = useTheme();
 

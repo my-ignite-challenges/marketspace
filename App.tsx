@@ -19,6 +19,7 @@ import { SignIn } from "./src/screens/SignIn";
 import { SignUp } from "./src/screens/SignUp";
 import { THEME } from "./src/theme";
 import { EditAd } from "./src/screens/EditAd";
+import { Routes } from "./src/routes";
 
 LogBox.ignoreLogs([
   "We can not support a function callback. See Github Issues for details https://github.com/adobe/react-spectrum/issues/2320",
@@ -38,7 +39,7 @@ export default function App() {
         translucent
         barStyle="dark-content"
       />
-      {fontsLoaded ? <EditAd /> : <Loading />}
+      {fontsLoaded ? <Routes /> : <Loading />}
     </NativeBaseProvider>
   );
 }

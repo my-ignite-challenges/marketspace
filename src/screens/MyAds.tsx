@@ -1,14 +1,18 @@
 import { useState } from "react";
 
+import { useNavigation } from "@react-navigation/native";
 import { FlatList, HStack, Select, Text, useTheme, VStack } from "native-base";
 import { CaretDown, Plus } from "phosphor-react-native";
 
 import { Header } from "../components/Header";
 import { Ad } from "../components/Ad";
 import { ads } from "../utils";
+import { AppStackNavigatorRoutes } from "../routes/app.routes";
 
 export function MyAds() {
   const [selectedAdFilter, setSelectedAdFilter] = useState("todos");
+
+  const { navigate } = useNavigation<AppStackNavigatorRoutes>();
 
   const { colors } = useTheme();
 
@@ -17,6 +21,7 @@ export function MyAds() {
       <Header
         title="Meus anúncios"
         rightIcon={<Plus color={colors.gray[700]} size={24} />}
+        onRightIconPress={() => navigate("CreateAd")}
       />
 
       <HStack alignItems="center" justifyContent="space-between" mb={5}>

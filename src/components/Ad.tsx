@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { Box, HStack, Image, Pressable, Text, VStack } from "native-base";
 
 import { Avatar } from "./Avatar";
@@ -6,6 +7,7 @@ import { Badge } from "./Badge";
 import { AdProps } from "../@types";
 
 import adImage from "../assets/bike.png";
+import { AppStackNavigatorRoutes } from "../routes/app.routes";
 
 type Props = {
   data: AdProps;
@@ -14,6 +16,16 @@ type Props = {
 };
 
 export function Ad({ data, index, showAvatar = true }: Props) {
+  const { navigate } = useNavigation<AppStackNavigatorRoutes>();
+
+  const adBelongsToLoggedUser = false;
+
+  function navigateToAdDetails() {
+    navigate(`${adBelongsToLoggedUser ? "MyAdDetails" : "AdDetails"}`, {
+      adId: data.id,
+    });
+  }
+
   return (
     <Pressable
       _pressed={{
@@ -24,6 +36,7 @@ export function Ad({ data, index, showAvatar = true }: Props) {
       borderRightWidth={index % 2 === 0 ? 20 : 0}
       borderRightColor={index % 2 === 0 ? "gray.200" : "none"}
       overflow="hidden"
+      onPress={navigateToAdDetails}
     >
       <VStack>
         <Box w="full" position="relative" rounded="md">

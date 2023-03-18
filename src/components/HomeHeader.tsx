@@ -5,8 +5,12 @@ import { Avatar } from "./Avatar";
 import { Button } from "./Button";
 
 import DefaultAvatar from "../assets/default-avatar.png";
+import { useNavigation } from "@react-navigation/native";
+import { AppStackNavigatorRoutes } from "../routes/app.routes";
 
 export function HomeHeader() {
+  const { navigate } = useNavigation<AppStackNavigatorRoutes>();
+
   return (
     <HStack w="full" h="45px" mt={16}>
       <Avatar source={DefaultAvatar} size={12} />
@@ -24,6 +28,7 @@ export function HomeHeader() {
           bgColor="gray.700"
           leftIcon={<Icon as={Feather} name="plus" color="gray.200" />}
           textColor="gray.100"
+          onPress={() => navigate("CreateAd")}
         />
       </HStack>
     </HStack>

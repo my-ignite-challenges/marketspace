@@ -17,9 +17,18 @@ import { Header } from "../components/Header";
 import { paymentMethods } from "../utils";
 
 import whatsappIcon from "../assets/whatsapp-icon.png";
+import { useRoute } from "@react-navigation/native";
+
+type RouteParams = {
+  adId: string;
+};
 
 export function AdDetails() {
   const { colors } = useTheme();
+
+  const { params } = useRoute();
+
+  const { adId } = params as RouteParams;
 
   const adBelongsToLoggedUser = false;
 
@@ -29,7 +38,7 @@ export function AdDetails() {
         <Header
           leftIcon={<ArrowLeft size={24} color={colors.gray[700]} />}
           mt={0}
-          mb={0}
+          mb={3}
         />
       </Box>
       <AdDetailsBody />

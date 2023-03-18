@@ -1,9 +1,13 @@
-import { Box, HStack, Icon, Image, Pressable, Text, VStack } from "native-base";
 import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { Box, HStack, Icon, Image, Pressable, Text, VStack } from "native-base";
 
 import TagImage from "../assets/tag.png";
+import { AppBottomTabNavigatorRoutes } from "../routes/app.routes";
 
 export function ActiveAddsReport() {
+  const { navigate } = useNavigation<AppBottomTabNavigatorRoutes>();
+
   return (
     <VStack w="full" h={24} my={8}>
       <Text color="gray.500">Seus produtos anunciados para venda</Text>
@@ -29,7 +33,11 @@ export function ActiveAddsReport() {
           </Text>
         </VStack>
 
-        <Pressable ml="auto">
+        <Pressable
+          ml="auto"
+          _pressed={{ opacity: 0.8 }}
+          onPress={() => navigate("MyAds")}
+        >
           <HStack space={2} alignItems="center">
             <Text color="blue.700" fontSize="xs" fontFamily="heading">
               Meus anúncios
