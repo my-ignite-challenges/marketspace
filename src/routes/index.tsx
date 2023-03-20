@@ -5,7 +5,7 @@ import { AuthRoutes } from "./auth.routes";
 export function Routes() {
   const theme = DefaultTheme;
 
-  const user_id = "1";
+  const user_id = "";
 
   return (
     <NavigationContainer theme={theme}>

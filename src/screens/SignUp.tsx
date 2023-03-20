@@ -1,11 +1,16 @@
+import { useNavigation } from "@react-navigation/native";
 import { Image, ScrollView, Text, VStack } from "native-base";
 
 import { Button } from "../components/Button";
 import { SignUpForm } from "../components/SignUp/SignUpForm";
 
+import { AuthStackNavigatorRoutes } from "../routes/auth.routes";
+
 import Logo from "../assets/logo-image.png";
 
 export function SignUp() {
+  const { navigate } = useNavigation<AuthStackNavigatorRoutes>();
+
   return (
     <ScrollView flex={1} bgColor="gray.200" px={12}>
       <VStack alignItems="center">
@@ -31,6 +36,7 @@ export function SignUp() {
           bgColor="gray.300"
           w="full"
           mt={4}
+          onPress={() => navigate("SignIn")}
         />
       </VStack>
     </ScrollView>

@@ -1,26 +1,88 @@
-import { Icon, Text, VStack } from "native-base";
-import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Text, VStack } from "native-base";
+import { Controller, useForm } from "react-hook-form";
+import * as yup from "yup";
 
 import { Input } from "../Input";
 import { Button } from "../Button";
+import { PressableEyeIcon } from "../PressableEyeIcon";
+
+type SignInData = {
+  email: string;
+  password: string;
+};
+
+const signInSchema = yup.object({
+  email: yup
+    .string()
+    .email("Formato de email inválido")
+    .required("Informe o email"),
+  password: yup.string().required("Informe a senha"),
+});
 
 export function SingInForm() {
+  const [showPassword, setShowPassword] = useState(true);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignInData>({
+    resolver: yupResolver(signInSchema),
+  });
+
+  function handleSignIn({ email, password }: SignInData) {
+    console.log(email, password);
+  }
+
   return (
     <VStack space={4} alignItems="center" mt="76px" pb="68px" w="full">
       <Text color="gray.600">Acesse sua conta</Text>
-      <Input placeholder="E-mail" />
-      <Input
-        placeholder="Senha"
-        InputRightElement={
-          <Icon
-            as={<Ionicons name="eye-outline" />}
-            size={5}
-            mr={3}
-            color="gray.500"
-          />
-        }
+      <VStack>
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              placeholder="E-mail"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              onChangeText={onChange}
+              value={value}
+              errorMessage={errors.email?.message}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              placeholder="Senha"
+              secureTextEntry={showPassword}
+              InputRightElement={
+                <PressableEyeIcon
+                  contentIsVisible={showPassword}
+                  onIconPress={() => setShowPassword(!showPassword)}
+                />
+              }
+              onChangeText={onChange}
+              value={value}
+              errorMessage={errors.password?.message}
+            />
+          )}
+        />
+      </VStack>
+
+      <Button
+        title="Entrar"
+        w="full"
+        bgColor="blue.500"
+        onPress={handleSubmit(handleSignIn)}
       />
-      <Button title="Entrar" w="full" bgColor="blue.500" mt={4} />
     </VStack>
   );
 }
