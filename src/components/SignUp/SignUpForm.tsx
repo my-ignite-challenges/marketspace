@@ -50,12 +50,6 @@ const signUpSchema = yup.object({
     .oneOf([yup.ref("password")], "As senhas não conferem"),
 });
 
-type AvatarFileProps = {
-  name: string;
-  uri: string;
-  type: string;
-};
-
 export function SignUpForm() {
   const [isSigningUp, setIsSigninUp] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
