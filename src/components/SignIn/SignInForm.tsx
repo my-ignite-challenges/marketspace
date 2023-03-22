@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { Input } from "../Input";
 import { Button } from "../Button";
 import { PressableEyeIcon } from "../PressableEyeIcon";
+import { useAuth } from "../../hooks/useAuth";
 
 type SignInData = {
   email: string;
@@ -24,6 +25,9 @@ const signInSchema = yup.object({
 
 export function SingInForm() {
   const [showPassword, setShowPassword] = useState(true);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+  const { signIn } = useAuth();
 
   const {
     control,
@@ -33,8 +37,15 @@ export function SingInForm() {
     resolver: yupResolver(signInSchema),
   });
 
-  function handleSignIn({ email, password }: SignInData) {
-    console.log(email, password);
+  async function handleSignIn({ email, password }: SignInData) {
+    try {
+      setIsAuthenticating(true);
+      await signIn(email, password);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsAuthenticating(false);
+    }
   }
 
   return (
@@ -81,6 +92,7 @@ export function SingInForm() {
         title="Entrar"
         w="full"
         bgColor="blue.500"
+        isLoading={isAuthenticating}
         onPress={handleSubmit(handleSignIn)}
       />
     </VStack>

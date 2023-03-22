@@ -9,16 +9,8 @@ import {
 } from "@expo-google-fonts/karla";
 
 import { Loading } from "./src/components/Loading";
-import { AdDetails } from "./src/screens/AdDetails";
-import { AdPreview } from "./src/screens/AdPreview";
-import { CreateAd } from "./src/screens/CreateAd";
-import { Home } from "./src/screens/Home";
-import { MyAdDetails } from "./src/screens/MyAdDetails";
-import { MyAds } from "./src/screens/MyAds";
-import { SignIn } from "./src/screens/SignIn";
-import { SignUp } from "./src/screens/SignUp";
+import { AuthProvider } from "./src/contexts/AuthContext";
 import { THEME } from "./src/theme";
-import { EditAd } from "./src/screens/EditAd";
 import { Routes } from "./src/routes";
 
 LogBox.ignoreLogs([
@@ -39,7 +31,7 @@ export default function App() {
         translucent
         barStyle="dark-content"
       />
-      {fontsLoaded ? <Routes /> : <Loading />}
+      <AuthProvider>{fontsLoaded ? <Routes /> : <Loading />}</AuthProvider>
     </NativeBaseProvider>
   );
 }

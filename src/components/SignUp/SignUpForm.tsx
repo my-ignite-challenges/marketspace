@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
+import { AxiosError } from "axios";
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
 import { Box, Image, Pressable, useToast, VStack } from "native-base";
@@ -15,7 +16,6 @@ import { PressableEyeIcon } from "../PressableEyeIcon";
 import DefaultAvatar from "../../assets/default-avatar.png";
 import Pencil from "../../assets/pencil.png";
 import { api } from "../../services/api";
-import { AxiosError } from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { AuthStackNavigatorRoutes } from "../../routes/auth.routes";
 
