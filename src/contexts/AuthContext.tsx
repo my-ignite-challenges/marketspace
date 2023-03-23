@@ -91,6 +91,14 @@ function AuthProvider({ children }: AuthProviderProps) {
     loadUserData();
   }, []);
 
+  useEffect(() => {
+    const subscribe = api.interceptTokenManagement(signOut);
+
+    return () => {
+      subscribe();
+    };
+  }, [signOut]);
+
   return (
     <AuthContext.Provider
       value={{ user, signIn, isStoredUserDataLoading, signOut }}
