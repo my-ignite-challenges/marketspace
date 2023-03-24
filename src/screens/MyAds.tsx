@@ -1,20 +1,54 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useNavigation } from "@react-navigation/native";
-import { FlatList, HStack, Select, Text, useTheme, VStack } from "native-base";
+import {
+  FlatList,
+  HStack,
+  Select,
+  Text,
+  useTheme,
+  useToast,
+  VStack,
+} from "native-base";
 import { CaretDown, Plus } from "phosphor-react-native";
 
 import { Header } from "../components/Header";
 import { Ad } from "../components/Ad";
-import { ads } from "../utils";
+
 import { AppStackNavigatorRoutes } from "../routes/app.routes";
+import { AdProps } from "../@types";
+import { api } from "../services/api";
+import { AppError } from "../utils/AppError";
 
 export function MyAds() {
   const [selectedAdFilter, setSelectedAdFilter] = useState("todos");
+  const [ads, setAds] = useState<AdProps[]>([]);
 
   const { navigate } = useNavigation<AppStackNavigatorRoutes>();
-
   const { colors } = useTheme();
+
+  const toast = useToast();
+
+  async function fetchMyAds() {
+    try {
+      const response = await api.get("/users/products");
+
+      setAds(response.data);
+    } catch (error) {
+      toast.show({
+        title:
+          error instanceof AppError
+            ? error.message
+            : "Não foi possível carregar os dados dos anúncios",
+        placement: "top",
+        bgColor: "red.500",
+      });
+    }
+  }
+
+  useEffect(() => {
+    fetchMyAds();
+  }, []);
 
   return (
     <VStack bgColor="gray.200" flex={1} px={6}>
@@ -25,7 +59,9 @@ export function MyAds() {
       />
 
       <HStack alignItems="center" justifyContent="space-between" mb={5}>
-        <Text color="gray.600">9 anúncios</Text>
+        <Text color="gray.600">
+          {ads.length} {ads.length > 1 ? "anúncios" : "anúncio"}
+        </Text>
         <Select
           w={20}
           h={8}
@@ -54,11 +90,15 @@ export function MyAds() {
         data={ads}
         keyExtractor={(item) => item.id}
         renderItem={({ item, index }) => (
-          <Ad data={item} index={index} showAvatar={false} />
+          <Ad
+            data={item}
+            index={index}
+            showAvatar={false}
+            mr={index < ads.length - 1 ? 5 : 0}
+          />
         )}
-        numColumns={2}
+        numColumns={ads.length > 1 ? 2 : 0}
         _contentContainerStyle={{
-          alignItems: "center",
           paddingBottom: 10,
         }}
         showsVerticalScrollIndicator={false}

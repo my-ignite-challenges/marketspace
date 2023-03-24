@@ -13,11 +13,11 @@ import { Avatar } from "./Avatar";
 import { Badge } from "./Badge";
 
 import { AdProps } from "../@types";
-
-import adImage from "../assets/bike.png";
 import { AppStackNavigatorRoutes } from "../routes/app.routes";
 import { api } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
+
+import adImage from "../assets/bike.png";
 
 type Props = IPressableProps & {
   data: AdProps;
@@ -54,7 +54,7 @@ export function Ad({ data, index, showAvatar = true, ...props }: Props) {
             source={
               data.product_images?.length
                 ? {
-                    uri: `${api.defaults.baseURL}/images/${data.product_images[0].path}`,
+                    uri: `${api.defaults.baseURL}/images/${data.product_images[0]?.path}`,
                   }
                 : adImage
             }
@@ -66,7 +66,9 @@ export function Ad({ data, index, showAvatar = true, ...props }: Props) {
           />
           {showAvatar && (
             <Avatar
-              source={adImage}
+              source={{
+                uri: `${api.defaults.baseURL}/images/${data?.user?.avatar}`,
+              }}
               position="absolute"
               top={1}
               left={1}
@@ -109,9 +111,7 @@ export function Ad({ data, index, showAvatar = true, ...props }: Props) {
           )}
         </Box>
         <VStack w="full" mt={1}>
-          <Text color={adIsActive ? "gray.600" : "gray.400"}>
-            Tênis Vermelho
-          </Text>
+          <Text color={adIsActive ? "gray.600" : "gray.400"}>{data.name}</Text>
           <HStack alignItems="center" space={1}>
             <Text
               color={adIsActive ? "gray.700" : "gray.400"}
@@ -125,7 +125,7 @@ export function Ad({ data, index, showAvatar = true, ...props }: Props) {
               fontSize="md"
               fontFamily={adIsActive ? "heading" : "body"}
             >
-              59,90
+              {data.price}
             </Text>
           </HStack>
         </VStack>

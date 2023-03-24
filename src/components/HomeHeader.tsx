@@ -7,13 +7,23 @@ import { Button } from "./Button";
 import DefaultAvatar from "../assets/default-avatar.png";
 import { useNavigation } from "@react-navigation/native";
 import { AppStackNavigatorRoutes } from "../routes/app.routes";
+import { useAuth } from "../hooks/useAuth";
+import { api } from "../services/api";
 
 export function HomeHeader() {
   const { navigate } = useNavigation<AppStackNavigatorRoutes>();
+  const { user } = useAuth();
 
   return (
     <HStack w="full" h="45px" mt={16}>
-      <Avatar source={DefaultAvatar} size={12} />
+      <Avatar
+        source={
+          user.avatar
+            ? { uri: `${api.defaults.baseURL}/images/${user.avatar}` }
+            : DefaultAvatar
+        }
+        size={12}
+      />
       <HStack flex={1} justifyContent="space-between">
         <VStack ml="10px">
           <Text color="gray.700" fontSize="md">

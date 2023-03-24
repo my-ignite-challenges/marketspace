@@ -24,7 +24,7 @@ type Props = {
   data: AdProps[];
 };
 
-export function ActiveAddsReport({ data }: Props) {
+export function ActiveAdsReport({ data }: Props) {
   const { navigate } = useNavigation<AppBottomTabNavigatorRoutes>();
 
   return (
@@ -45,10 +45,10 @@ export function ActiveAddsReport({ data }: Props) {
         <Image source={TagImage} alt="Imagem de Etiqueta" w="22px" h="22px" />
         <VStack ml={4}>
           <Text color="gray.600" fontSize="xl" fontFamily="heading">
-            4
+            {data.length}
           </Text>
           <Text color="gray.600" fontSize="xs">
-            anúncios ativos
+            {data.length > 1 ? "anúncios ativos" : "anúncio ativo"}
           </Text>
         </VStack>
 
@@ -70,7 +70,12 @@ export function ActiveAddsReport({ data }: Props) {
         data={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item, index }) => (
-          <Ad data={item} index={index} mr={index < ads.length - 1 ? 5 : 0} />
+          <Ad
+            data={item}
+            index={index}
+            mr={index < ads.length - 1 ? 5 : 0}
+            showAvatar={false}
+          />
         )}
         horizontal
         showsHorizontalScrollIndicator={false}

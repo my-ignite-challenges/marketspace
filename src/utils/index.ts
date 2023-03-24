@@ -10,13 +10,13 @@ import { AdProps } from "../@types";
 
 import adImage from "../assets/bike.png";
 
-export const ads: AdProps[] = [
+export const ads: any[] = [
   {
     id: "1",
     image: adImage,
     ownerAvatar: "",
     title: "Tênis Vermelho",
-    price: "59.90",
+    price: 59,
     isNew: false,
     isInactive: false,
   },
@@ -25,7 +25,7 @@ export const ads: AdProps[] = [
     image: adImage,
     ownerAvatar: "",
     title: "Tênis Vermelho",
-    price: "59.90",
+    price: 59,
     isNew: true,
     isInactive: false,
   },
@@ -34,7 +34,7 @@ export const ads: AdProps[] = [
     image: adImage,
     ownerAvatar: "",
     title: "Tênis Vermelho",
-    price: "59.90",
+    price: 59,
     isNew: false,
     isInactive: false,
   },
@@ -43,7 +43,7 @@ export const ads: AdProps[] = [
     image: adImage,
     ownerAvatar: "",
     title: "Tênis Vermelho",
-    price: "59.90",
+    price: 59,
     isNew: true,
     isInactive: false,
   },
@@ -52,7 +52,7 @@ export const ads: AdProps[] = [
     image: adImage,
     ownerAvatar: "",
     title: "Tênis Vermelho",
-    price: "59.90",
+    price: 59,
     isNew: true,
     isInactive: true,
   },
@@ -61,7 +61,7 @@ export const ads: AdProps[] = [
     image: adImage,
     ownerAvatar: "",
     title: "Tênis Vermelho",
-    price: "59.90",
+    price: 59,
     isNew: false,
     isInactive: true,
   },

@@ -1,7 +1,8 @@
-import { FlatList, useToast, VStack } from "native-base";
 import { useEffect, useState } from "react";
-import { api } from "../services/api";
 
+import { FlatList, useToast, VStack } from "native-base";
+
+import { api } from "../services/api";
 import { Ad } from "./Ad";
 import { AppError } from "../utils/AppError";
 import { AdProps } from "../@types";
