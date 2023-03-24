@@ -1,5 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
-import { Box, HStack, Image, Pressable, Text, VStack } from "native-base";
+import {
+  Box,
+  HStack,
+  Image,
+  IPressableProps,
+  Pressable,
+  Text,
+  VStack,
+} from "native-base";
 
 import { Avatar } from "./Avatar";
 import { Badge } from "./Badge";
@@ -8,20 +16,24 @@ import { AdProps } from "../@types";
 
 import adImage from "../assets/bike.png";
 import { AppStackNavigatorRoutes } from "../routes/app.routes";
+import { api } from "../services/api";
+import { useAuth } from "../hooks/useAuth";
 
-type Props = {
+type Props = IPressableProps & {
   data: AdProps;
   index: number;
   showAvatar?: boolean;
 };
 
-export function Ad({ data, index, showAvatar = true }: Props) {
+export function Ad({ data, index, showAvatar = true, ...props }: Props) {
   const { navigate } = useNavigation<AppStackNavigatorRoutes>();
 
-  const adBelongsToLoggedUser = false;
+  const { user } = useAuth();
+
+  const adIsActive = data?.user?.id === user.id ? data.is_active : true;
 
   function navigateToAdDetails() {
-    navigate(`${adBelongsToLoggedUser ? "MyAdDetails" : "AdDetails"}`, {
+    navigate(`${data?.user?.id === user.id ? "MyAdDetails" : "AdDetails"}`, {
       adId: data.id,
     });
   }
@@ -31,17 +43,21 @@ export function Ad({ data, index, showAvatar = true }: Props) {
       _pressed={{
         opacity: 0.8,
       }}
-      w="50%"
-      mb={6}
-      borderRightWidth={index % 2 === 0 ? 20 : 0}
-      borderRightColor={index % 2 === 0 ? "gray.200" : "none"}
+      w="160.5px"
       overflow="hidden"
       onPress={navigateToAdDetails}
+      {...props}
     >
       <VStack>
         <Box w="full" position="relative" rounded="md">
           <Image
-            source={data.image}
+            source={
+              data.product_images?.length
+                ? {
+                    uri: `${api.defaults.baseURL}/images/${data.product_images[0].path}`,
+                  }
+                : adImage
+            }
             alt="Imagem do Produto"
             w="full"
             h="100px"
@@ -60,13 +76,13 @@ export function Ad({ data, index, showAvatar = true }: Props) {
             />
           )}
           <Badge
-            title={data.isNew ? "Novo" : "Usado"}
-            bgColor={data.isNew ? "blue.700" : "gray.600"}
+            title={data.is_new ? "Novo" : "Usado"}
+            bgColor={data.is_new ? "blue.700" : "gray.600"}
             position="absolute"
             top={1}
             right={1}
           />
-          {data.isInactive && (
+          {!adIsActive && (
             <>
               <Text
                 color="gray.100"
@@ -93,21 +109,21 @@ export function Ad({ data, index, showAvatar = true }: Props) {
           )}
         </Box>
         <VStack w="full" mt={1}>
-          <Text color={data.isInactive ? "gray.400" : "gray.600"}>
+          <Text color={adIsActive ? "gray.600" : "gray.400"}>
             Tênis Vermelho
           </Text>
           <HStack alignItems="center" space={1}>
             <Text
-              color={data.isInactive ? "gray.400" : "gray.700"}
+              color={adIsActive ? "gray.700" : "gray.400"}
               fontSize="xs"
-              fontFamily={data.isInactive ? "body" : "heading"}
+              fontFamily={adIsActive ? "heading" : "body"}
             >
               R$
             </Text>
             <Text
-              color={data.isInactive ? "gray.400" : "gray.700"}
+              color={adIsActive ? "gray.700" : "gray.400"}
               fontSize="md"
-              fontFamily={data.isInactive ? "body" : "heading"}
+              fontFamily={adIsActive ? "heading" : "body"}
             >
               59,90
             </Text>

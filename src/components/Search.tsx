@@ -39,7 +39,7 @@ export function Search() {
       rightElement={<InputButtons />}
       placeholder="Buscar anúncio"
       mt={3}
-      mb={6}
+      mb={2}
     />
   );
 }

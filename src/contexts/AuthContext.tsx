@@ -52,11 +52,11 @@ function AuthProvider({ children }: AuthProviderProps) {
 
         api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
       }
-
-      console.log(user);
     } catch (error) {
       console.log(error);
       throw error;
+    } finally {
+      setIsStoredUserDataLoading(false);
     }
   }
 
@@ -64,11 +64,11 @@ function AuthProvider({ children }: AuthProviderProps) {
     try {
       const loggedUser = await getUserDataFromStorage();
 
-      const { token, refresh_token } = await getTokenFromStorage();
+      const { token } = await getTokenFromStorage();
 
       if (token && loggedUser) {
         setUser({ ...loggedUser, token } as User);
-        await saveTokenToStorage({ token, refresh_token });
+        api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       }
     } catch (error) {
       throw error;

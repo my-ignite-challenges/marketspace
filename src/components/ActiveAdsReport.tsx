@@ -1,15 +1,34 @@
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { Box, HStack, Icon, Image, Pressable, Text, VStack } from "native-base";
+import {
+  Box,
+  FlatList,
+  HStack,
+  Icon,
+  Image,
+  Pressable,
+  Text,
+  VStack,
+} from "native-base";
+
+import { Ad } from "./Ad";
+
+import { AppBottomTabNavigatorRoutes } from "../routes/app.routes";
+import { ads } from "../utils";
+
+import { AdProps } from "../@types";
 
 import TagImage from "../assets/tag.png";
-import { AppBottomTabNavigatorRoutes } from "../routes/app.routes";
 
-export function ActiveAddsReport() {
+type Props = {
+  data: AdProps[];
+};
+
+export function ActiveAddsReport({ data }: Props) {
   const { navigate } = useNavigation<AppBottomTabNavigatorRoutes>();
 
   return (
-    <VStack w="full" h={24} my={8}>
+    <VStack w="full" my={8}>
       <Text color="gray.500">Seus produtos anunciados para venda</Text>
       <Box
         w="full"
@@ -46,6 +65,17 @@ export function ActiveAddsReport() {
           </HStack>
         </Pressable>
       </Box>
+
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item, index }) => (
+          <Ad data={item} index={index} mr={index < ads.length - 1 ? 5 : 0} />
+        )}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        _contentContainerStyle={{ mt: 8 }}
+      />
     </VStack>
   );
 }
