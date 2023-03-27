@@ -72,25 +72,30 @@ export const paymentMethods = [
     id: "1",
     label: "Boleto",
     icon: Barcode,
+    value: "boleto",
   },
   {
     id: "2",
     label: "Pix",
     icon: QrCode,
+    value: "pix",
   },
   {
     id: "3",
     label: "Dinheiro",
     icon: Money,
+    value: "cash",
   },
   {
     id: "4",
     label: "Cartão de Crédito",
     icon: CreditCard,
+    value: "card",
   },
   {
     id: "5",
     label: "Depósito Bancário",
     icon: Bank,
+    value: "deposit",
   },
 ];

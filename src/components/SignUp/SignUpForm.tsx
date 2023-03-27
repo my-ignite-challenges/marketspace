@@ -119,8 +119,6 @@ export function SignUpForm() {
   async function handleSignUp({ name, email, password, tel }: SignUpData) {
     try {
       setIsSigninUp(true);
-      console.log("data", name, email, password, tel);
-
       const signUpForm = new FormData();
 
       signUpForm.append("avatar", avatarFile);
