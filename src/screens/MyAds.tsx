@@ -29,6 +29,8 @@ export function MyAds() {
 
   const toast = useToast();
 
+  const numberOfColumns = ads.length > 1 ? 2 : 0;
+
   async function fetchMyAds() {
     try {
       const response = await api.get("/users/products");
@@ -87,6 +89,7 @@ export function MyAds() {
       </HStack>
 
       <FlatList
+        key={numberOfColumns}
         data={ads}
         keyExtractor={(item) => item.id}
         renderItem={({ item, index }) => (
@@ -97,7 +100,7 @@ export function MyAds() {
             mr={index < ads.length - 1 ? 5 : 0}
           />
         )}
-        numColumns={ads.length > 1 ? 2 : 0}
+        numColumns={numberOfColumns}
         _contentContainerStyle={{
           paddingBottom: 10,
         }}
