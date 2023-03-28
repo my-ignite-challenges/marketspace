@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { useNavigation } from "@react-navigation/native";
+import { event } from "../utils/event";
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
 import {
@@ -28,8 +30,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "../services/api";
 import { TextArea } from "./TextArea";
 import { AppError } from "../utils/AppError";
-import { useNavigation } from "@react-navigation/native";
-import { AppBottomTabNavigatorRoutes } from "../routes/app.routes";
+import {
+  AppBottomTabNavigatorRoutes,
+  AppStackNavigatorRoutes,
+} from "../routes/app.routes";
 
 type ProductImagePickerProps = {
   uri?: string;
@@ -61,12 +65,15 @@ export function AdForm() {
 
   const { colors } = useTheme();
   const toast = useToast();
-  const { navigate } = useNavigation<AppBottomTabNavigatorRoutes>();
+  const { navigate, goBack } = useNavigation<AppBottomTabNavigatorRoutes>();
+  const stackNavigation = useNavigation<AppStackNavigatorRoutes>();
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    trigger,
+    clearErrors,
+    formState: { errors, isValid },
   } = useForm<ProductInputData>({
     resolver: yupResolver(adSchema),
   });
@@ -215,8 +222,6 @@ export function AdForm() {
         placement: "top",
         bgColor: "green.500",
       });
-
-      navigate("Home");
     } catch (error) {
       toast.show({
         title:
@@ -228,8 +233,29 @@ export function AdForm() {
       });
     } finally {
       setIsSubmittingProductData(false);
+      navigate("Home");
     }
   }
+
+  function handleNavigationToAdPreview() {
+    if (isValid) {
+      clearErrors();
+      stackNavigation.navigate("AdPreview", {
+        eventName: "submitAdForm",
+        isPublishing: isSubmittingProductData,
+      });
+    } else {
+      trigger();
+    }
+  }
+
+  useEffect(() => {
+    event.on("submitAdForm", handleSubmit(handleAdFormSubmission));
+
+    return () => {
+      event.off("submitAdForm");
+    };
+  }, [handleAdFormSubmission]);
 
   return (
     <VStack bgColor="gray.200" flex={1}>
@@ -398,14 +424,14 @@ export function AdForm() {
             bgColor="gray.300"
             textColor="gray.700"
             w="48%"
-            onPress={() => {}}
+            onPress={() => goBack()}
           />
           <Button
             title="Avançar"
             bgColor="gray.700"
             w="48%"
             isLoading={isSubmittingProductData}
-            onPress={handleSubmit(handleAdFormSubmission)}
+            onPress={handleNavigationToAdPreview}
           />
         </HStack>
       </ScrollView>
