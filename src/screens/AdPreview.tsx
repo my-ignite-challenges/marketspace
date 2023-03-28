@@ -1,4 +1,6 @@
-import { useRoute } from "@react-navigation/native";
+import { useState } from "react";
+
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   Button as NativeBaseButton,
   HStack,
@@ -16,14 +18,20 @@ import { event } from "../utils/event";
 
 type RouteParams = {
   eventName: string;
-  isPublishing: boolean;
 };
 
 export function AdPreview() {
   const { colors } = useTheme();
+  const [isPublishing, setIsPublishing] = useState(false);
 
   const { params } = useRoute();
-  const { eventName, isPublishing } = params as RouteParams;
+  const { eventName } = params as RouteParams;
+  const { goBack } = useNavigation();
+
+  function handleAdFormSubmissionEvent() {
+    setIsPublishing(true);
+    event.emit(eventName);
+  }
 
   return (
     <VStack bgColor="gray.200" flex={1}>
@@ -61,7 +69,7 @@ export function AdPreview() {
         justifyContent="space-between"
         px={6}
       >
-        <NativeBaseButton bgColor="gray.300" w="48%">
+        <NativeBaseButton bgColor="gray.300" w="48%" onPress={goBack}>
           <HStack alignItems="center" space={2} borderRadius="6px" py="3px">
             <ArrowLeft size={16} color={colors.gray[600]} />
             <Text color="gray.700" fontFamily="heading">
@@ -73,7 +81,7 @@ export function AdPreview() {
           bgColor="blue.500"
           w="48%"
           isLoading={isPublishing}
-          onPress={() => event.emit(eventName)}
+          onPress={handleAdFormSubmissionEvent}
         >
           <HStack alignItems="center" space={2} borderRadius="6px" py="3px">
             <Tag size={16} color={colors.gray[200]} />

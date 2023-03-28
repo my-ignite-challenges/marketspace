@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from "@react-navigation/native";
-import { event } from "../utils/event";
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
+import { Controller, useForm } from "react-hook-form";
 import {
   useTheme,
   Text,
@@ -23,17 +24,18 @@ import * as yup from "yup";
 import { Button } from "../components/Button";
 import { Header } from "../components/Header";
 import { Input } from "../components/Input";
-
-import { paymentMethods } from "../utils";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { api } from "../services/api";
 import { TextArea } from "./TextArea";
+
+import { api } from "../services/api";
 import { AppError } from "../utils/AppError";
+import { event } from "../utils/event";
+import { paymentMethods } from "../utils";
 import {
   AppBottomTabNavigatorRoutes,
   AppStackNavigatorRoutes,
 } from "../routes/app.routes";
+import { CheckboxGroup } from "./CheckboxGroup";
+import { RadioGroup } from "./RadioGroup";
 
 type ProductImagePickerProps = {
   uri?: string;
@@ -44,6 +46,8 @@ type ProductInputData = {
   name: string;
   description: string;
   price: number;
+  payment_methods: string[];
+  is_new: string;
 };
 
 const MAX_NUMBER_OF_IMAGES = 3;
@@ -52,11 +56,15 @@ const adSchema = yup.object({
   name: yup.string().required("O título do anúncio é obrigatório."),
   description: yup.string().required("A descrição do produto é obrigatória."),
   price: yup.string().required("O valor do produto é obrigatório."),
+  payment_methods: yup
+    .array()
+    .min(1)
+    .of(yup.string().required())
+    .required("Selecione pelo menos um meio de pagamento"),
+  is_new: yup.string().required("Informe se o produto é novo ou usado"),
 });
 
 export function AdForm() {
-  const [productCondition, setProductCondition] = useState("");
-  const [selectedPaymentMethods, setSelectedPaymentMethods] = useState([]);
   const [selectedImages, setSelectedImages] = useState<any[]>([]);
   const [acceptsTrade, setAcceptsTrade] = useState(false);
   const [isSubmittingProductData, setIsSubmittingProductData] = useState(false);
@@ -190,16 +198,26 @@ export function AdForm() {
     name,
     description,
     price,
+    is_new,
+    payment_methods,
   }: ProductInputData) {
     try {
       setIsSubmittingProductData(true);
+      console.log({
+        name,
+        description,
+        price,
+        is_new,
+        payment_methods,
+        acceptsTrade,
+      });
       const response = await api.post("/products", {
         name,
         description,
-        is_new: productCondition === "new",
+        is_new: is_new === "new",
         price: Number(price),
         accept_trade: acceptsTrade,
-        payment_methods: [...selectedPaymentMethods],
+        payment_methods,
       });
 
       if (response.data && selectedImages.length > 0) {
@@ -242,7 +260,6 @@ export function AdForm() {
       clearErrors();
       stackNavigation.navigate("AdPreview", {
         eventName: "submitAdForm",
-        isPublishing: isSubmittingProductData,
       });
     } else {
       trigger();
@@ -333,20 +350,25 @@ export function AdForm() {
                 )}
               />
 
-              <Radio.Group
-                name="product_condition"
-                accessibilityLabel="Condição do produto"
-                value={productCondition}
-                onChange={(value) => {
-                  setProductCondition(value);
-                }}
-                colorScheme="brand"
-              >
-                <HStack w="full" alignItems="center" space={8}>
-                  <Radio value="new">Produto novo</Radio>
-                  <Radio value="used">Produto usado</Radio>
-                </HStack>
-              </Radio.Group>
+              <Controller
+                control={control}
+                name="is_new"
+                render={({ field: { onChange, value } }) => (
+                  <RadioGroup
+                    name="is_new"
+                    accessibilityLabel="Condição do produto"
+                    value={value}
+                    onChange={onChange}
+                    colorScheme="brand"
+                    errorMessage={errors.is_new?.message}
+                  >
+                    <HStack w="full" alignItems="center" space={8}>
+                      <Radio value="new">Produto novo</Radio>
+                      <Radio value="used">Produto usado</Radio>
+                    </HStack>
+                  </RadioGroup>
+                )}
+              />
             </VStack>
 
             <VStack space={4} mt={8}>
@@ -389,24 +411,32 @@ export function AdForm() {
               <Text fontFamily="heading" color="gray.600">
                 Meios de pagamento aceitos
               </Text>
-              <Checkbox.Group
-                onChange={setSelectedPaymentMethods}
-                value={selectedPaymentMethods}
-                accessibilityLabel="Escolha os meios de pagameno"
-              >
-                {paymentMethods.map((method) => (
-                  <Checkbox
-                    value={method.value}
-                    my={2}
-                    key={method.id}
-                    colorScheme="brand"
+
+              <Controller
+                control={control}
+                name="payment_methods"
+                render={({ field: { onChange, value } }) => (
+                  <CheckboxGroup
+                    onChange={onChange}
+                    value={value}
+                    accessibilityLabel="Escolha os meios de pagamento"
+                    errorMessage={errors.payment_methods?.message}
                   >
-                    <Text color="gray.600" fontSize="md">
-                      {method.label}
-                    </Text>
-                  </Checkbox>
-                ))}
-              </Checkbox.Group>
+                    {paymentMethods.map((method) => (
+                      <Checkbox
+                        value={method.value}
+                        my={2}
+                        key={method.id}
+                        colorScheme="brand"
+                      >
+                        <Text color="gray.600" fontSize="md">
+                          {method.label}
+                        </Text>
+                      </Checkbox>
+                    ))}
+                  </CheckboxGroup>
+                )}
+              />
             </VStack>
           </VStack>
         </VStack>
@@ -424,7 +454,7 @@ export function AdForm() {
             bgColor="gray.300"
             textColor="gray.700"
             w="48%"
-            onPress={() => goBack()}
+            onPress={goBack}
           />
           <Button
             title="Avançar"

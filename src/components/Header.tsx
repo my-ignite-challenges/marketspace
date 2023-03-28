@@ -32,7 +32,7 @@ export function Header({
       mb={8}
       {...props}
     >
-      <Pressable _pressed={{ opacity: 0.8 }} onPress={() => goBack()}>
+      <Pressable _pressed={{ opacity: 0.8 }} onPress={goBack}>
         {leftIcon ? leftIcon : <Box w={6} h={6} />}
       </Pressable>
       <Text color="gray.700" fontFamily="heading" fontSize="xl">

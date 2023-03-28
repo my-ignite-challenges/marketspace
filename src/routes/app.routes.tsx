@@ -20,7 +20,7 @@ import { MyAdDetails } from "../screens/MyAdDetails";
 type AppStackRoutes = {
   HomeTabs: undefined;
   AdDetails: { adId: string };
-  AdPreview: { eventName: string; isPublishing: boolean };
+  AdPreview: { eventName: string };
   CreateAd: undefined;
   EditAd: { adId: string };
   MyAdDetails: { adId: string };
