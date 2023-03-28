@@ -73,7 +73,7 @@ export function ActiveAdsReport({ data }: Props) {
           <Ad
             data={item}
             index={index}
-            mr={index < ads.length - 1 ? 5 : 0}
+            mr={index < data.length - 1 ? 5 : 0}
             showAvatar={false}
           />
         )}
