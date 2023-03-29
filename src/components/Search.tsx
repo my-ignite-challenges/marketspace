@@ -1,19 +1,18 @@
-import { useState } from "react";
-
 import { Divider, HStack, Icon, Image, Pressable } from "native-base";
 import { Feather } from "@expo/vector-icons";
 
 import { Input } from "./Input";
-import { Filter } from "./Filter";
 
 import FilterIcon from "../assets/filter-icon.png";
 
-function InputButtons() {
-  const [showModal, setShowModal] = useState(false);
+type Props = {
+  setShowFilter: (value: boolean) => void;
+};
 
+function InputButtons({ setShowFilter }: Props) {
   return (
     <HStack alignItems="center" space={3} mr={3}>
-      <Pressable>
+      <Pressable _pressed={{ opacity: 0.8 }}>
         <Icon as={Feather} name="search" color="gray.600" size={5} />
       </Pressable>
       <Divider
@@ -22,21 +21,21 @@ function InputButtons() {
         h="18px"
         bgColor="gray.400"
       />
-      <Pressable alignItems="center" onPress={() => setShowModal(true)}>
+      <Pressable
+        alignItems="center"
+        _pressed={{ opacity: 0.8 }}
+        onPress={() => setShowFilter(true)}
+      >
         <Image source={FilterIcon} alt="Ícone de Filtro" />
       </Pressable>
-
-      {showModal && (
-        <Filter showModal={showModal} setShowModal={setShowModal} />
-      )}
     </HStack>
   );
 }
 
-export function Search() {
+export function Search({ setShowFilter }: Props) {
   return (
     <Input
-      rightElement={<InputButtons />}
+      rightElement={<InputButtons setShowFilter={setShowFilter} />}
       placeholder="Buscar anúncio"
       mt={3}
       mb={2}

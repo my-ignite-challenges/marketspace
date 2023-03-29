@@ -10,9 +10,19 @@ import { Search } from "../components/Search";
 import { AdProps } from "../@types";
 import { api } from "../services/api";
 import { AppError } from "../utils/AppError";
+import { Filter } from "../components/Filter";
+
+export type Filters = {
+  is_new?: string;
+  accept_trade?: boolean;
+  payment_methods: string[];
+};
 
 export function Home() {
+  const [loggedUserAds, setLoggedUserAds] = useState<AdProps[]>([]);
   const [ads, setAds] = useState<AdProps[]>([]);
+  const [showFilter, setShowFilter] = useState(false);
+  const [filters, setFilters] = useState<Filters>({} as Filters);
 
   const toast = useToast();
 
@@ -20,8 +30,34 @@ export function Home() {
     try {
       const response = await api.get("/users/products");
 
+      setLoggedUserAds(response.data);
+    } catch (error) {
+      toast.show({
+        title:
+          error instanceof AppError
+            ? error.message
+            : "Não foi possível carregar os dados dos anúncios",
+        placement: "top",
+        bgColor: "red.500",
+      });
+    }
+  }
+
+  async function fetchAds() {
+    try {
+      const paymentMethodQueryString = filters?.payment_methods?.map(
+        (method) => `&payment_methods=${method}`
+      );
+      const filterString = `?is_new=${filters?.is_new}&accept_trade=${filters?.accept_trade}${paymentMethodQueryString}`;
+      const response = await api.get(
+        filters ? "/products" : `/products/${filterString}`
+      );
+
+      console.log(response.data);
+
       setAds(response.data);
     } catch (error) {
+      console.log(error);
       toast.show({
         title:
           error instanceof AppError
@@ -37,15 +73,24 @@ export function Home() {
     fetchLoggedUserAds();
   }, []);
 
+  useEffect(() => {
+    fetchAds();
+  }, [filters]);
+
   return (
-    <VStack flex={1} px={6} bgColor="gray.200">
-      <HomeHeader />
-      {ads.length > 0 && <ActiveAdsReport data={ads} />}
-      <VStack>
-        <Text color="gray.500">Compre produtos variados</Text>
-        <Search />
+    <>
+      <VStack flex={1} px={6} bgColor="gray.200">
+        <HomeHeader />
+        {loggedUserAds.length > 0 && <ActiveAdsReport data={loggedUserAds} />}
+        <VStack>
+          <Text color="gray.500">Compre produtos variados</Text>
+          <Search setShowFilter={setShowFilter} />
+        </VStack>
+        <AdList data={ads} />
       </VStack>
-      <AdList />
-    </VStack>
+      {showFilter && (
+        <Filter setShowFilter={setShowFilter} setFilters={setFilters} />
+      )}
+    </>
   );
 }
