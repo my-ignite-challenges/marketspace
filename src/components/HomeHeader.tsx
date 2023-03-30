@@ -30,7 +30,7 @@ export function HomeHeader() {
             Boas vindas,
           </Text>
           <Text color="gray.700" fontSize="md" fontFamily="heading">
-            Fulano!
+            {user.name}
           </Text>
         </VStack>
         <Button
