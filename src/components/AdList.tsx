@@ -8,23 +8,21 @@ type Props = {
 };
 
 export function AdList({ data }: Props) {
+  const numberOfColumns = data.length > 1 ? 2 : 1;
+
   return (
     <VStack flex={1}>
       <FlatList
+        key={numberOfColumns}
         data={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item, index }) => (
           <Ad data={item} index={index} mr={index % 2 === 0 ? 5 : 0} mb={6} />
         )}
-        numColumns={data.length > 1 ? 2 : 1}
-        _contentContainerStyle={
-          data.length > 1
-            ? {
-                alignItems: "center",
-                paddingBottom: 10,
-              }
-            : {}
-        }
+        numColumns={numberOfColumns}
+        _contentContainerStyle={{
+          paddingBottom: 10,
+        }}
         showsVerticalScrollIndicator={false}
       />
     </VStack>
