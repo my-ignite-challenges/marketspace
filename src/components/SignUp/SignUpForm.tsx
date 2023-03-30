@@ -77,8 +77,6 @@ export function SignUpForm() {
         allowsEditing: true,
       });
 
-      console.log(selectedPhoto);
-
       if (selectedPhoto.canceled) {
         return;
       }
@@ -112,7 +110,7 @@ export function SignUpForm() {
         setAvatarFile(selectedPhotoFile);
       }
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 

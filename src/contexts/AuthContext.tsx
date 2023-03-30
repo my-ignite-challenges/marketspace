@@ -53,7 +53,6 @@ function AuthProvider({ children }: AuthProviderProps) {
         api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
       }
     } catch (error) {
-      console.log(error);
       throw error;
     } finally {
       setIsStoredUserDataLoading(false);

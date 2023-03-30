@@ -11,7 +11,6 @@ import { AdProps } from "../@types";
 import { api } from "../services/api";
 import { AppError } from "../utils/AppError";
 import { Filter } from "../components/Filter";
-import { useAuth } from "../hooks/useAuth";
 
 export type Filters = {
   is_new?: string;
@@ -29,13 +28,9 @@ export function Home() {
 
   const hasFilters = Object.keys(filters).length > 0;
 
-  const { signOut } = useAuth();
-
   async function fetchLoggedUserAds() {
     try {
       const response = await api.get("/users/products");
-
-      console.log("myads", response.data);
 
       setLoggedUserAds(response.data);
     } catch (error) {
@@ -55,7 +50,6 @@ export function Home() {
       const paymentMethodQueryString = filters?.payment_methods?.map(
         (method) => `&payment_methods=${method}`
       );
-      console.log(filters?.is_new);
 
       const filterString = `?is_new=${filters?.is_new === "new"}&accept_trade=${
         filters?.accept_trade
@@ -66,10 +60,7 @@ export function Home() {
       );
 
       setAds(response.data);
-      console.log("request", response.request);
-      console.log("ads", response.data);
     } catch (error) {
-      console.log(error);
       toast.show({
         title:
           error instanceof AppError
@@ -83,14 +74,11 @@ export function Home() {
 
   useEffect(() => {
     fetchLoggedUserAds();
-    // signOut();
   }, []);
 
   useEffect(() => {
     fetchAds();
   }, [filters]);
-
-  console.log("filters", filters);
 
   return (
     <>

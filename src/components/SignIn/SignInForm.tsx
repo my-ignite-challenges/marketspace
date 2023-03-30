@@ -42,7 +42,7 @@ export function SingInForm() {
       setIsAuthenticating(true);
       await signIn(email, password);
     } catch (error) {
-      console.log(error);
+      throw error;
     } finally {
       setIsAuthenticating(false);
     }

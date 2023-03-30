@@ -203,14 +203,7 @@ export function AdForm() {
   }: ProductInputData) {
     try {
       setIsSubmittingProductData(true);
-      console.log({
-        name,
-        description,
-        price,
-        is_new,
-        payment_methods,
-        acceptsTrade,
-      });
+
       const response = await api.post("/products", {
         name,
         description,
