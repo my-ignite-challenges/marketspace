@@ -11,6 +11,7 @@ import { AdProps } from "../@types";
 import { api } from "../services/api";
 import { AppError } from "../utils/AppError";
 import { Filter } from "../components/Filter";
+import { useAuth } from "../hooks/useAuth";
 
 export type Filters = {
   is_new?: string;
@@ -26,9 +27,15 @@ export function Home() {
 
   const toast = useToast();
 
+  const hasFilters = Object.keys(filters).length > 0;
+
+  const { signOut } = useAuth();
+
   async function fetchLoggedUserAds() {
     try {
       const response = await api.get("/users/products");
+
+      console.log("myads", response.data);
 
       setLoggedUserAds(response.data);
     } catch (error) {
@@ -48,21 +55,26 @@ export function Home() {
       const paymentMethodQueryString = filters?.payment_methods?.map(
         (method) => `&payment_methods=${method}`
       );
-      const filterString = `?is_new=${filters?.is_new}&accept_trade=${filters?.accept_trade}${paymentMethodQueryString}`;
+      console.log(filters?.is_new);
+
+      const filterString = `?is_new=${filters?.is_new === "new"}&accept_trade=${
+        filters?.accept_trade
+      }${paymentMethodQueryString}`;
+
       const response = await api.get(
-        filters ? "/products" : `/products/${filterString}`
+        `/products${hasFilters ? filterString : ""}`
       );
 
-      console.log(response.data);
-
       setAds(response.data);
+      console.log("request", response.request);
+      console.log("ads", response.data);
     } catch (error) {
       console.log(error);
       toast.show({
         title:
           error instanceof AppError
             ? error.message
-            : "Não foi possível carregar os dados dos anúncios",
+            : "Não foi possível carregar os dados dos anúncios ou filtrar pelos argumentos informados.",
         placement: "top",
         bgColor: "red.500",
       });
@@ -71,11 +83,14 @@ export function Home() {
 
   useEffect(() => {
     fetchLoggedUserAds();
+    // signOut();
   }, []);
 
   useEffect(() => {
     fetchAds();
   }, [filters]);
+
+  console.log("filters", filters);
 
   return (
     <>

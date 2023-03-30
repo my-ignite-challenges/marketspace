@@ -1,7 +1,8 @@
 import { HStack, Icon, Pressable, Text } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
+import { IHStackProps } from "native-base/lib/typescript/components/primitives/Stack/HStack";
 
-type Props = {
+type Props = IHStackProps & {
   bgColor: string;
   textColor?: string;
   title: string;
@@ -13,17 +14,18 @@ export function Chip({
   isDeletable = false,
   textColor = "#FFFFFF",
   title,
+  ...props
 }: Props) {
   return (
     <HStack
       bgColor={bgColor}
       w="76px"
-      h={7}
       rounded="2xl"
       alignItems="center"
+      justifyContent="center"
       p="6px"
-      pl={4}
       space={1}
+      {...props}
     >
       <Text color={textColor} fontSize="xs" fontFamily="heading">
         {title.toUpperCase()}

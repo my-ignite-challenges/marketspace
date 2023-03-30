@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Checkbox,
@@ -12,10 +12,10 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { Button } from "./Button";
-import { Chip } from "./Chip";
 
 import { Filters } from "../screens/Home";
 import { paymentMethods } from "../utils";
+import { SelectableFilterChip } from "./SelectableFilterChip";
 
 type Props = {
   setFilters: (filters: Filters) => void;
@@ -23,11 +23,21 @@ type Props = {
 };
 
 export function Filter({ setFilters, setShowFilter }: Props) {
-  const [productCondition, setProductCondition] = useState("");
-  const [acceptsTrade, setAccesptsTrade] = useState(false);
+  const [productCondition, setProductCondition] = useState<string>("new");
+  const [acceptsTrade, setAcceptsTrade] = useState(false);
   const [selectedPaymentMethods, setSelectedPaymentMethods] = useState<
     string[]
   >([]);
+
+  function resetFilters() {
+    setProductCondition("");
+    setAcceptsTrade(false);
+    setSelectedPaymentMethods([]);
+  }
+
+  useEffect(() => {
+    setFilters({} as Filters);
+  }, []);
 
   return (
     <VStack
@@ -63,8 +73,16 @@ export function Filter({ setFilters, setShowFilter }: Props) {
           Condição
         </Text>
         <HStack space={2} mt={3}>
-          <Chip title="Novo" bgColor="blue.500" isDeletable />
-          <Chip title="Usado" bgColor="gray.300" textColor="gray.500" />
+          <SelectableFilterChip
+            title="Novo"
+            isActive={productCondition === "new"}
+            onPress={() => setProductCondition("new")}
+          />
+          <SelectableFilterChip
+            title="Usado"
+            isActive={productCondition === "used"}
+            onPress={() => setProductCondition("used")}
+          />
         </HStack>
       </VStack>
 
@@ -72,7 +90,13 @@ export function Filter({ setFilters, setShowFilter }: Props) {
         <Text fontFamily="heading" color="gray.600">
           Aceita troca?
         </Text>
-        <Switch size="lg" colorScheme="blue.500" onTrackColor="blue.500" />
+        <Switch
+          size="lg"
+          colorScheme="blue.500"
+          onTrackColor="blue.500"
+          isChecked={acceptsTrade}
+          onValueChange={setAcceptsTrade}
+        />
       </VStack>
 
       <VStack mt={6}>
@@ -86,7 +110,7 @@ export function Filter({ setFilters, setShowFilter }: Props) {
         >
           {paymentMethods.map((method) => (
             <Checkbox
-              value={method.label}
+              value={method.value}
               my={2}
               key={method.id}
               colorScheme="brand"
@@ -105,6 +129,7 @@ export function Filter({ setFilters, setShowFilter }: Props) {
           bgColor="gray.300"
           textColor="gray.700"
           w="48%"
+          onPress={resetFilters}
         />
         <Button
           title="Aplicar Filtros"

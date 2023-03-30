@@ -29,7 +29,7 @@ export function MyAds() {
 
   const toast = useToast();
 
-  const numberOfColumns = ads.length > 1 ? 2 : 0;
+  const numberOfColumns = ads.length > 1 ? 2 : 1;
 
   async function fetchMyAds() {
     try {
