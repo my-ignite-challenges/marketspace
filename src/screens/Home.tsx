@@ -11,6 +11,7 @@ import { AdProps } from "../@types";
 import { api } from "../services/api";
 import { AppError } from "../utils/AppError";
 import { Filter } from "../components/Filter";
+import { Loading } from "../components/Loading";
 
 export type Filters = {
   is_new?: string;
@@ -23,6 +24,8 @@ export function Home() {
   const [ads, setAds] = useState<AdProps[]>([]);
   const [showFilter, setShowFilter] = useState(false);
   const [filters, setFilters] = useState<Filters>({} as Filters);
+  const [adListIsLoading, setAdListIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const toast = useToast();
 
@@ -30,6 +33,7 @@ export function Home() {
 
   async function fetchLoggedUserAds() {
     try {
+      setAdListIsLoading(true);
       const response = await api.get("/users/products");
 
       setLoggedUserAds(response.data);
@@ -42,6 +46,8 @@ export function Home() {
         placement: "top",
         bgColor: "red.500",
       });
+    } finally {
+      setAdListIsLoading(false);
     }
   }
 
@@ -77,6 +83,12 @@ export function Home() {
   }, []);
 
   useEffect(() => {
+    if (hasFilters) {
+      setFilters({} as Filters);
+    }
+  }, []);
+
+  useEffect(() => {
     fetchAds();
   }, [filters]);
 
@@ -87,9 +99,14 @@ export function Home() {
         {loggedUserAds.length > 0 && <ActiveAdsReport data={loggedUserAds} />}
         <VStack>
           <Text color="gray.500">Compre produtos variados</Text>
-          <Search setShowFilter={setShowFilter} />
+          <Search
+            setShowFilter={setShowFilter}
+            setSearchTerm={setSearchTerm}
+            searchTerm={searchTerm}
+            setAds={setAds}
+          />
         </VStack>
-        <AdList data={ads} />
+        {adListIsLoading ? <Loading /> : <AdList data={ads} />}
       </VStack>
       {showFilter && (
         <Filter setShowFilter={setShowFilter} setFilters={setFilters} />

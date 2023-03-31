@@ -30,14 +30,10 @@ export function Filter({ setFilters, setShowFilter }: Props) {
   >([]);
 
   function resetFilters() {
-    setProductCondition("");
+    setProductCondition("new");
     setAcceptsTrade(false);
     setSelectedPaymentMethods([]);
   }
-
-  useEffect(() => {
-    setFilters({} as Filters);
-  }, []);
 
   return (
     <VStack

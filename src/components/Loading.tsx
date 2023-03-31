@@ -1,8 +1,12 @@
 import { Spinner, Center } from "native-base";
 
-export function Loading() {
+type Props = {
+  bgColor?: string;
+};
+
+export function Loading({ bgColor }: Props) {
   return (
-    <Center flex={1} bgColor="gray.300">
+    <Center flex={1} bgColor={bgColor}>
       <Spinner color="blue.700" size="sm" />
     </Center>
   );

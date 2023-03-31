@@ -1,4 +1,4 @@
-import { FlatList, VStack } from "native-base";
+import { FlatList, Text, VStack } from "native-base";
 
 import { Ad } from "./Ad";
 import { AdProps } from "../@types";
@@ -24,6 +24,11 @@ export function AdList({ data }: Props) {
           paddingBottom: 10,
         }}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={() => (
+          <Text color="gray.600" textAlign="center" fontFamily="heading">
+            Nenhum item corresponde aos filtros aplicados.
+          </Text>
+        )}
       />
     </VStack>
   );
