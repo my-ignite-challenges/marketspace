@@ -1,19 +1,58 @@
-import { Divider, HStack, Icon, Image, Pressable } from "native-base";
-import { Feather } from "@expo/vector-icons";
+import {
+  Divider,
+  HStack,
+  Icon,
+  Image,
+  Pressable,
+  useTheme,
+  useToast,
+} from "native-base";
+import { MagnifyingGlass } from "phosphor-react-native";
 
 import { Input } from "./Input";
+import { api } from "../services/api";
+import { AdProps } from "../@types";
 
 import FilterIcon from "../assets/filter-icon.png";
+import { AppError } from "../utils/AppError";
 
 type Props = {
   setShowFilter: (value: boolean) => void;
+  setSearchTerm: (value: string) => void;
+  setAds: (value: AdProps[]) => void;
+  searchTerm: string;
 };
 
-function InputButtons({ setShowFilter }: Props) {
+function InputButtons({
+  setShowFilter,
+  setSearchTerm,
+  searchTerm,
+  setAds,
+}: Props) {
+  const { colors } = useTheme();
+  const toast = useToast();
+
+  async function handleSearch() {
+    try {
+      const response = await api.get(`/products?query=${searchTerm}`);
+      setSearchTerm("");
+      setAds(response.data);
+    } catch (error) {
+      toast.show({
+        title:
+          error instanceof AppError
+            ? error.message
+            : "Nenhum item correspondente à pesquisa foi encontrado.",
+        placement: "top",
+        bgColor: "red.500",
+      });
+    }
+  }
+
   return (
     <HStack alignItems="center" space={3} mr={3}>
-      <Pressable _pressed={{ opacity: 0.8 }}>
-        <Icon as={Feather} name="search" color="gray.600" size={5} />
+      <Pressable _pressed={{ opacity: 0.8 }} onPress={handleSearch}>
+        <MagnifyingGlass color={colors.gray[600]} size={20} />
       </Pressable>
       <Divider
         flexDirection="column"
@@ -32,11 +71,25 @@ function InputButtons({ setShowFilter }: Props) {
   );
 }
 
-export function Search({ setShowFilter }: Props) {
+export function Search({
+  setShowFilter,
+  searchTerm,
+  setSearchTerm,
+  setAds,
+}: Props) {
   return (
     <Input
-      rightElement={<InputButtons setShowFilter={setShowFilter} />}
+      rightElement={
+        <InputButtons
+          setShowFilter={setShowFilter}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          setAds={setAds}
+        />
+      }
       placeholder="Buscar anúncio"
+      value={searchTerm}
+      onChangeText={setSearchTerm}
       mt={3}
       mb={2}
     />
