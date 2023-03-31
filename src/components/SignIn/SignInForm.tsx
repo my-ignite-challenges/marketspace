@@ -83,6 +83,7 @@ export function SingInForm() {
               onChangeText={onChange}
               value={value}
               errorMessage={errors.password?.message}
+              onSubmitEditing={handleSubmit(handleSignIn)}
             />
           )}
         />
