@@ -6,7 +6,7 @@ import {
   QrCode,
 } from "phosphor-react-native";
 
-import { AdProps } from "../@types";
+import { PaymentMethod } from "../@types";
 
 import adImage from "../assets/bike.png";
 
@@ -67,35 +67,36 @@ export const ads: any[] = [
   },
 ];
 
-export const paymentMethods = [
+export const paymentMethodsIcons = [
   {
-    id: "1",
-    label: "Boleto",
     icon: Barcode,
-    value: "boleto",
+    label: "boleto",
   },
   {
-    id: "2",
-    label: "Pix",
     icon: QrCode,
-    value: "pix",
+    label: "pix",
   },
   {
-    id: "3",
-    label: "Dinheiro",
     icon: Money,
-    value: "cash",
+    label: "cash",
   },
   {
-    id: "4",
-    label: "Cartão de Crédito",
     icon: CreditCard,
-    value: "card",
+    label: "card",
   },
   {
-    id: "5",
-    label: "Depósito Bancário",
     icon: Bank,
-    value: "deposit",
+    label: "deposit",
   },
 ];
+
+export function assignIconToPaymentMethods(methods: PaymentMethod[]) {
+  const paymentMethodsWithIcons = methods?.map((method) => {
+    const paymentMethodIcon = paymentMethodsIcons.find(
+      (methodIcon) => methodIcon.label === method.key
+    );
+    return { ...method, icon: paymentMethodIcon?.icon };
+  });
+
+  return paymentMethodsWithIcons;
+}

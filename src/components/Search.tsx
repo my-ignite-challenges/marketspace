@@ -1,7 +1,6 @@
 import {
   Divider,
   HStack,
-  Icon,
   Image,
   Pressable,
   useTheme,
@@ -9,12 +8,12 @@ import {
 } from "native-base";
 import { MagnifyingGlass } from "phosphor-react-native";
 
+import { AdProps } from "../@types";
 import { Input } from "./Input";
 import { api } from "../services/api";
-import { AdProps } from "../@types";
+import { AppError } from "../utils/AppError";
 
 import FilterIcon from "../assets/filter-icon.png";
-import { AppError } from "../utils/AppError";
 
 type Props = {
   setShowFilter: (value: boolean) => void;

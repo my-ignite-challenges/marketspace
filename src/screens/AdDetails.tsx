@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import { useRoute } from "@react-navigation/native";
 import {
   Box,
@@ -7,11 +9,17 @@ import {
   Text,
   useTheme,
   VStack,
+  useToast,
 } from "native-base";
 import { ArrowLeft } from "phosphor-react-native";
 
 import { AdDetailsBody } from "../components/AdDetailsBody";
 import { Header } from "../components/Header";
+
+import { AdProps } from "../@types";
+import { useAuth } from "../hooks/useAuth";
+import { api } from "../services/api";
+import { AppError } from "../utils/AppError";
 
 import whatsappIcon from "../assets/whatsapp-icon.png";
 
@@ -20,13 +28,36 @@ type RouteParams = {
 };
 
 export function AdDetails() {
-  const { colors } = useTheme();
+  const [ad, setAd] = useState<AdProps>({} as AdProps);
 
+  const { user } = useAuth();
   const { params } = useRoute();
+  const { colors } = useTheme();
+  const toast = useToast();
 
   const { adId } = params as RouteParams;
 
-  const adBelongsToLoggedUser = false;
+  const adBelongsToLoggedUser = user.id === ad?.user_id;
+
+  async function fetchAdDetails() {
+    try {
+      const response = await api.get(`/products/${adId}`);
+      setAd(response.data);
+    } catch (error) {
+      toast.show({
+        title:
+          error instanceof AppError
+            ? error.message
+            : "Nenhum item correspondente à pesquisa foi encontrado.",
+        placement: "top",
+        bgColor: "red.500",
+      });
+    }
+  }
+
+  useEffect(() => {
+    fetchAdDetails();
+  }, []);
 
   return (
     <VStack bgColor="gray.200" flex={1}>
@@ -37,7 +68,7 @@ export function AdDetails() {
           mb={3}
         />
       </Box>
-      <AdDetailsBody />
+      <AdDetailsBody data={ad} />
       <HStack
         w="full"
         h="90px"
@@ -51,7 +82,7 @@ export function AdDetails() {
             R$
           </Text>
           <Text color="blue.700" fontSize="2xl" fontFamily="heading">
-            59,90
+            {ad?.price}
           </Text>
         </HStack>
 

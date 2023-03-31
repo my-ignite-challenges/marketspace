@@ -1,18 +1,18 @@
-import { Box, HStack, Text } from "native-base";
+import { Box, HStack } from "native-base";
+
+import { ProductImage } from "../../@types";
 import { IHStackProps } from "native-base/lib/typescript/components/primitives/Stack/HStack";
 
 type Props = IHStackProps & {
-  numberOfImages: number;
+  images: ProductImage[];
   currentImageIndex: number;
 };
 
 export function AdImageSliderIndicators({
-  numberOfImages,
+  images,
   currentImageIndex,
   ...props
 }: Props) {
-  const images = Array(numberOfImages).fill("");
-
   return (
     <HStack
       position="absolute"
@@ -23,7 +23,7 @@ export function AdImageSliderIndicators({
       w="full"
       {...props}
     >
-      {images.map((image, index) => (
+      {images?.map((_, index) => (
         <Box
           bgColor="gray.100"
           w="121px"

@@ -6,44 +6,67 @@ import { Box, Image, Text } from "native-base";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Carousel from "react-native-reanimated-carousel";
 
+import { AdProps } from "../../@types";
 import { AdImageSliderIndicators } from "./AdImageSliderIndicators";
-import { ads } from "../../utils";
+import { api } from "../../services/api";
+import { useAuth } from "../../hooks/useAuth";
 
-export function AdImageSlider() {
+type Props = {
+  data: AdProps;
+};
+
+export function AdImageSlider({ data }: Props) {
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
   const width = Dimensions.get("screen").width;
-  const images = ads.map((ad) => ad.image).slice(0, 3);
 
-  const isAdActive = true;
+  const { user } = useAuth();
+
+  const isAdActive = user.id === data?.user_id ? data?.is_active : true;
 
   return (
     <GestureHandlerRootView style={{ position: "relative" }}>
-      <Carousel
-        width={width}
-        height={280}
-        data={images}
-        scrollAnimationDuration={500}
-        onSnapToItem={(index) => setCurrentImageIndex(index)}
-        renderItem={({ item }) => (
-          <Box position="relative" h="full">
-            <Image
-              w={width}
-              source={item}
-              flex={1}
-              resizeMode="cover"
-              alt="Imagem do anúncio"
-            />
-            <AdImageSliderIndicators
-              numberOfImages={images.length}
-              position="absolute"
-              bottom={1}
-              left={1}
-              currentImageIndex={currentImageIndex}
-            />
-          </Box>
-        )}
-      />
+      {data.product_images?.length > 1 ? (
+        <Carousel
+          width={width}
+          height={280}
+          data={data?.product_images}
+          scrollAnimationDuration={500}
+          onSnapToItem={(index) => setCurrentImageIndex(index)}
+          renderItem={({ item }) => (
+            <Box position="relative" h="full">
+              <Image
+                w={width}
+                source={{ uri: `${api.defaults.baseURL}/images/${item.path}` }}
+                flex={1}
+                resizeMode="cover"
+                alt="Imagem do anúncio"
+              />
+              <AdImageSliderIndicators
+                images={data?.product_images}
+                position="absolute"
+                bottom={1}
+                left={1}
+                currentImageIndex={currentImageIndex}
+              />
+            </Box>
+          )}
+        />
+      ) : (
+        <Box position="relative" height="280px">
+          <Image
+            w={width}
+            source={{
+              uri:
+                data?.product_images &&
+                `${api.defaults.baseURL}/images/${data?.product_images[0]?.path}`,
+            }}
+            flex={1}
+            resizeMode="cover"
+            alt="Imagem do anúncio"
+          />
+        </Box>
+      )}
 
       {!isAdActive && (
         <Box

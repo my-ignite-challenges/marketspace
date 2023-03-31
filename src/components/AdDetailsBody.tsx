@@ -1,16 +1,21 @@
 import { ScrollView } from "native-base";
 
 import { AdDescription } from "./AdDescription";
-
 import { AdImageSlider } from "./AdImageSlider/AdImageSlider";
 
-export function AdDetailsBody() {
+import { AdProps } from "../@types";
+
+type Props = {
+  data: AdProps;
+};
+
+export function AdDetailsBody({ data }: Props) {
   return (
     <>
-      <AdImageSlider />
+      <AdImageSlider data={data} />
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <AdDescription />
+        <AdDescription data={data} />
       </ScrollView>
     </>
   );

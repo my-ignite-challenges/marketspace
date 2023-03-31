@@ -1,9 +1,9 @@
-type PaymentMethod = {
+export type PaymentMethod = {
   key: string;
-  value: string;
+  name: string;
 };
 
-type ProductImage = {
+export type ProductImage = {
   id: string;
   path: string;
 };
@@ -12,6 +12,7 @@ export type AdProps = {
   id: string;
   user_id: string;
   name: string;
+  description: string;
   price: number;
   is_new: boolean;
   accept_trade: boolean;
@@ -21,5 +22,6 @@ export type AdProps = {
   user: {
     id: string;
     avatar: string;
+    name: string;
   };
 };

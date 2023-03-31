@@ -2,41 +2,55 @@ import { HStack, Text, useTheme, VStack } from "native-base";
 
 import { Avatar } from "./Avatar";
 import { Badge } from "./Badge";
-import { paymentMethods } from "../utils";
 
-import adImage from "../assets/bike.png";
+import { AdProps } from "../@types";
+import { assignIconToPaymentMethods } from "../utils";
 
-export function AdDescription() {
+import { api } from "../services/api";
+
+type Props = {
+  data: AdProps;
+};
+
+export function AdDescription({ data }: Props) {
   const { colors } = useTheme();
+
+  const paymentMethodsWithIcons = assignIconToPaymentMethods(
+    data.payment_methods
+  );
+
   return (
     <VStack px={6}>
       <HStack space={2} alignItems="center" mt={5}>
-        <Avatar source={adImage} size={8} borderWidth="2px" />
-        <Text color="gray.700">Makenna Baptista</Text>
+        <Avatar
+          source={{
+            uri:
+              data.user?.avatar &&
+              `${api.defaults.baseURL}/images/${data.user?.avatar}`,
+          }}
+          size={8}
+          borderWidth="2px"
+        />
+        <Text color="gray.700">{data.user?.name}</Text>
       </HStack>
 
       <VStack mt={7} space={2}>
         <Badge title="Novo" bgColor="gray.300" textColor="gray.600" />
         <HStack justifyContent="space-between">
           <Text color="gray.700" fontSize="xl" fontFamily="heading">
-            Bicicleta
+            {data?.name}
           </Text>
           <HStack alignItems="center" space={1}>
             <Text color="blue.500" fontFamily="heading">
               R$
             </Text>
             <Text color="blue.500" fontSize="xl" fontFamily="heading">
-              59,90
+              {data.price}
             </Text>
           </HStack>
         </HStack>
 
-        <Text color="gray.600">
-          Cras congue cursus in tortor sagittis placerat nunc, tellus arcu.
-          Vitae ante leo eget maecenas urna mattis cursus. Mauris metus amet
-          nibh mauris mauris accumsan, euismod. Aenean leo nunc, purus iaculis
-          in aliquam.
-        </Text>
+        <Text color="gray.600">{data.description}</Text>
       </VStack>
 
       <VStack>
@@ -44,7 +58,7 @@ export function AdDescription() {
           <Text color="gray.600" fontFamily="heading">
             Aceita troca?
           </Text>
-          <Text color="gray.600">Sim</Text>
+          <Text color="gray.600">{data.accept_trade ? "Sim" : "Não"}</Text>
         </HStack>
 
         <VStack>
@@ -53,10 +67,12 @@ export function AdDescription() {
           </Text>
 
           <VStack mt={2} mb={6} space={2}>
-            {paymentMethods.map((method) => (
-              <HStack key={method.id} alignItems="center" space={2}>
-                <method.icon size={18} color={colors.gray[700]} />
-                <Text color="gray.600">{method.label}</Text>
+            {paymentMethodsWithIcons?.map((method) => (
+              <HStack key={method.key} alignItems="center" space={2}>
+                {method.icon && (
+                  <method.icon size={18} color={colors.gray[700]} />
+                )}
+                <Text color="gray.600">{method.name}</Text>
               </HStack>
             ))}
           </VStack>
