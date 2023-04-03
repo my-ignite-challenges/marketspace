@@ -7,7 +7,7 @@ import {
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
 import { useTheme } from "native-base";
-import { House, Tag } from "phosphor-react-native";
+import { House, SignOut as SignOutIcon, Tag } from "phosphor-react-native";
 
 import { AdDetails } from "../screens/AdDetails";
 import { AdPreview } from "../screens/AdPreview";
@@ -16,6 +16,8 @@ import { EditAd } from "../screens/EditAd";
 import { Home } from "../screens/Home";
 import { MyAds } from "../screens/MyAds";
 import { MyAdDetails } from "../screens/MyAdDetails";
+import { SignOut } from "../screens/SignOut";
+import { useAuth } from "../hooks/useAuth";
 
 type AppStackRoutes = {
   HomeTabs: undefined;
@@ -29,6 +31,7 @@ type AppStackRoutes = {
 type HomeTabRoutes = {
   Home: undefined;
   MyAds: undefined;
+  SignOut: undefined;
 };
 
 export type AppBottomTabNavigatorRoutes =
@@ -41,6 +44,7 @@ const { Navigator: HomeTabNavigator, Screen: HomeTabScreen } =
 
 function HomeTabs() {
   const { colors } = useTheme();
+  const { signOut } = useAuth();
 
   return (
     <HomeTabNavigator
@@ -72,6 +76,20 @@ function HomeTabs() {
         options={{
           tabBarIcon: ({ color }) => <Tag color={color} size={24} />,
         }}
+      />
+
+      <HomeTabScreen
+        name="SignOut"
+        component={SignOut}
+        options={{
+          tabBarIcon: () => <SignOutIcon color={colors.red[500]} size={24} />,
+        }}
+        listeners={() => ({
+          tabPress: (event) => {
+            event.preventDefault();
+            signOut();
+          },
+        })}
       />
     </HomeTabNavigator>
   );
