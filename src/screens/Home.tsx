@@ -97,7 +97,7 @@ export function Home() {
       <VStack flex={1} px={6} bgColor="gray.200">
         <HomeHeader />
         {loggedUserAds.length > 0 && <ActiveAdsReport data={loggedUserAds} />}
-        <VStack>
+        <VStack mt={!ads.length || !loggedUserAds.length ? 8 : 0}>
           <Text color="gray.500">Compre produtos variados</Text>
           <Search
             setShowFilter={setShowFilter}

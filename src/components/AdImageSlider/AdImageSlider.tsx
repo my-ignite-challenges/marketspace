@@ -6,23 +6,24 @@ import { Box, Image, Text } from "native-base";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Carousel from "react-native-reanimated-carousel";
 
-import { AdProps } from "../../@types";
 import { AdImageSliderIndicators } from "./AdImageSliderIndicators";
 import { api } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 
 type Props = {
-  data: AdProps;
+  data: any;
+  isPreview?: boolean;
 };
 
-export function AdImageSlider({ data }: Props) {
+export function AdImageSlider({ data, isPreview = false }: Props) {
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
   const width = Dimensions.get("screen").width;
 
   const { user } = useAuth();
 
-  const isAdActive = user.id === data?.user_id ? data?.is_active : true;
+  const isAdActive =
+    !isPreview && user.id === data?.user_id ? data?.is_active : true;
 
   return (
     <GestureHandlerRootView style={{ position: "relative" }}>
@@ -33,11 +34,15 @@ export function AdImageSlider({ data }: Props) {
           data={data?.product_images}
           scrollAnimationDuration={500}
           onSnapToItem={(index) => setCurrentImageIndex(index)}
-          renderItem={({ item }) => (
+          renderItem={({ item }: any) => (
             <Box position="relative" h="full">
               <Image
                 w={width}
-                source={{ uri: `${api.defaults.baseURL}/images/${item.path}` }}
+                source={{
+                  uri: isPreview
+                    ? item.uri
+                    : `${api.defaults.baseURL}/images/${item.path}`,
+                }}
                 flex={1}
                 resizeMode="cover"
                 alt="Imagem do anúncio"

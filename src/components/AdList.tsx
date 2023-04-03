@@ -26,7 +26,9 @@ export function AdList({ data }: Props) {
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={() => (
           <Text color="gray.600" textAlign="center" fontFamily="heading">
-            Nenhum item corresponde aos filtros aplicados.
+            {data.length > 0
+              ? "Nenhum anúncio corresponde aos filtros aplicados"
+              : "Nenhum anúncio cadastrado"}
           </Text>
         )}
       />

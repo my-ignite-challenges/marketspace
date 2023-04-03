@@ -62,7 +62,7 @@ export function MyAds() {
 
       <HStack alignItems="center" justifyContent="space-between" mb={5}>
         <Text color="gray.600">
-          {ads.length} {ads.length > 1 ? "anúncios" : "anúncio"}
+          {ads.length} {ads.length === 1 ? "anúncio" : "anúncios"}
         </Text>
         <Select
           w={20}

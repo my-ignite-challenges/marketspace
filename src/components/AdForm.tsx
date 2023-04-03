@@ -36,6 +36,7 @@ import {
 } from "../routes/app.routes";
 import { CheckboxGroup } from "./CheckboxGroup";
 import { RadioGroup } from "./RadioGroup";
+import { useAuth } from "../hooks/useAuth";
 
 type ProductImagePickerProps = {
   uri?: string;
@@ -71,6 +72,7 @@ export function AdForm() {
 
   const data = {} as any;
 
+  const { user } = useAuth();
   const { colors } = useTheme();
   const toast = useToast();
   const { navigate, goBack } = useNavigation<AppBottomTabNavigatorRoutes>();
@@ -81,6 +83,7 @@ export function AdForm() {
     handleSubmit,
     trigger,
     clearErrors,
+    getValues,
     formState: { errors, isValid },
   } = useForm<ProductInputData>({
     resolver: yupResolver(adSchema),
@@ -253,6 +256,23 @@ export function AdForm() {
       clearErrors();
       stackNavigation.navigate("AdPreview", {
         eventName: "submitAdForm",
+        data: {
+          ...getValues(),
+          payment_methods: getValues().payment_methods.map((item) => {
+            const paymentMethod = paymentMethods.find(
+              (method) => method.key === item
+            );
+
+            return paymentMethod;
+          }),
+          user_id: user.id,
+          product_images: selectedImages,
+          user: {
+            id: user.id,
+            avatar: user.avatar,
+            name: user.name,
+          },
+        },
       });
     } else {
       trigger();
@@ -415,15 +435,15 @@ export function AdForm() {
                     accessibilityLabel="Escolha os meios de pagamento"
                     errorMessage={errors.payment_methods?.message}
                   >
-                    {paymentMethods.map((method) => (
+                    {paymentMethods?.map((method) => (
                       <Checkbox
-                        value={method.value}
+                        value={method.key}
                         my={2}
-                        key={method.id}
+                        key={method.key}
                         colorScheme="brand"
                       >
                         <Text color="gray.600" fontSize="md">
-                          {method.label}
+                          {method.name}
                         </Text>
                       </Checkbox>
                     ))}

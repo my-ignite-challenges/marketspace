@@ -14,15 +14,20 @@ import { AdPreview } from "../screens/AdPreview";
 import { CreateAd } from "../screens/CreateAd";
 import { EditAd } from "../screens/EditAd";
 import { Home } from "../screens/Home";
-import { MyAds } from "../screens/MyAds";
 import { MyAdDetails } from "../screens/MyAdDetails";
+import { MyAds } from "../screens/MyAds";
 import { SignOut } from "../screens/SignOut";
+
+import { AdPreviewProps } from "../@types";
 import { useAuth } from "../hooks/useAuth";
 
 type AppStackRoutes = {
   HomeTabs: undefined;
   AdDetails: { adId: string };
-  AdPreview: { eventName: string };
+  AdPreview: {
+    eventName: string;
+    data: any;
+  };
   CreateAd: undefined;
   EditAd: { adId: string };
   MyAdDetails: { adId: string };

@@ -18,6 +18,7 @@ import { event } from "../utils/event";
 
 type RouteParams = {
   eventName: string;
+  data: any;
 };
 
 export function AdPreview() {
@@ -25,7 +26,7 @@ export function AdPreview() {
   const [isPublishing, setIsPublishing] = useState(false);
 
   const { params } = useRoute();
-  const { eventName } = params as RouteParams;
+  const { eventName, data } = params as RouteParams;
   const { goBack } = useNavigation();
 
   function handleAdFormSubmissionEvent() {
@@ -57,8 +58,8 @@ export function AdPreview() {
       </VStack>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <AdImageSlider />
-        <AdDescription />
+        <AdImageSlider data={data} isPreview />
+        <AdDescription data={data} />
       </ScrollView>
 
       <HStack

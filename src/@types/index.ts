@@ -18,7 +18,24 @@ export type AdProps = {
   accept_trade: boolean;
   product_images: ProductImage[];
   payment_methods: PaymentMethod[];
-  is_active?: boolean;
+  is_active: boolean;
+  user: {
+    id: string;
+    avatar: string;
+    name: string;
+  };
+};
+
+export type AdPreviewProps = {
+  product_images: {
+    uri: string;
+  }[];
+  name: string;
+  user_id: string;
+  description: string;
+  price: number;
+  payment_methods: string[];
+  is_new: string;
   user: {
     id: string;
     avatar: string;
