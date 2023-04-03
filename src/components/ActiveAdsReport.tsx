@@ -14,7 +14,6 @@ import {
 import { Ad } from "./Ad";
 
 import { AppBottomTabNavigatorRoutes } from "../routes/app.routes";
-import { ads } from "../utils";
 
 import { AdProps } from "../@types";
 
