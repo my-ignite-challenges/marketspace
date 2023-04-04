@@ -106,13 +106,13 @@ export function Filter({ setFilters, setShowFilter }: Props) {
         >
           {paymentMethods.map((method) => (
             <Checkbox
-              value={method.value}
+              value={method.key}
               my={2}
-              key={method.id}
+              key={method.key}
               colorScheme="brand"
             >
               <Text color="gray.600" fontSize="md">
-                {method.label}
+                {method.name}
               </Text>
             </Checkbox>
           ))}
