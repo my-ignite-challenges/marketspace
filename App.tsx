@@ -15,6 +15,7 @@ import { Routes } from "./src/routes";
 
 LogBox.ignoreLogs([
   "We can not support a function callback. See Github Issues for details https://github.com/adobe/react-spectrum/issues/2320",
+  "We can not support a function callback",
 ]);
 
 export default function App() {
