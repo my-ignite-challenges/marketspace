@@ -19,9 +19,10 @@ import { AppStackNavigatorRoutes } from "../routes/app.routes";
 import { AdProps } from "../@types";
 import { api } from "../services/api";
 import { AppError } from "../utils/AppError";
+import { MyAdsFilters } from "../utils";
 
 export function MyAds() {
-  const [selectedAdFilter, setSelectedAdFilter] = useState("todos");
+  const [selectedAdFilter, setSelectedAdFilter] = useState("all");
   const [ads, setAds] = useState<AdProps[]>([]);
 
   const { navigate } = useNavigation<AppStackNavigatorRoutes>();
@@ -35,7 +36,21 @@ export function MyAds() {
     try {
       const response = await api.get("/users/products");
 
-      setAds(response.data);
+      const adsWithNewProducts = response.data.filter(
+        (item: AdProps) => item.is_new
+      );
+
+      const adsWithUsedProducts = response.data.filter(
+        (item: AdProps) => !item.is_new
+      );
+
+      if (selectedAdFilter === "all") {
+        setAds(response.data);
+      } else {
+        setAds(
+          selectedAdFilter === "new" ? adsWithNewProducts : adsWithUsedProducts
+        );
+      }
     } catch (error) {
       toast.show({
         title:
@@ -50,7 +65,7 @@ export function MyAds() {
 
   useEffect(() => {
     fetchMyAds();
-  }, []);
+  }, [selectedAdFilter]);
 
   return (
     <VStack bgColor="gray.200" flex={1} px={6}>
@@ -65,8 +80,8 @@ export function MyAds() {
           {ads.length} {ads.length === 1 ? "anúncio" : "anúncios"}
         </Text>
         <Select
-          w={20}
-          h={8}
+          w={24}
+          h="34px"
           accessibilityLabel="Selecione uma opção"
           placeholder="Selecionar"
           _selectedItem={{
@@ -75,16 +90,20 @@ export function MyAds() {
               color: "gray.100",
             },
           }}
-          dropdownIcon={<CaretDown size={16} style={{ marginRight: 4 }} />}
+          dropdownIcon={<CaretDown size={16} style={{ marginRight: 10 }} />}
           selectedValue={selectedAdFilter}
           onValueChange={(itemValue: string) => {
             setSelectedAdFilter(itemValue);
           }}
           color="gray.700"
         >
-          <Select.Item label="Todos" value="todos" />
-          <Select.Item label="Usados" value="usado" />
-          <Select.Item label="Novos" value="novo" />
+          {MyAdsFilters.map((option) => (
+            <Select.Item
+              key={option.key}
+              label={option.name}
+              value={option.key}
+            />
+          ))}
         </Select>
       </HStack>
 
