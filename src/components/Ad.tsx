@@ -19,6 +19,8 @@ import { useAuth } from "../hooks/useAuth";
 
 import adImage from "../assets/bike.png";
 
+import { Dimensions } from "react-native";
+
 type Props = IPressableProps & {
   data: AdProps;
   index: number;
@@ -32,6 +34,8 @@ export function Ad({ data, index, showAvatar = true, ...props }: Props) {
 
   const adIsActive = data?.user?.id === user.id ? data.is_active : true;
 
+  const width = Dimensions.get("screen").width;
+
   function navigateToAdDetails() {
     navigate(`${data?.user?.id === user.id ? "MyAdDetails" : "AdDetails"}`, {
       adId: data.id,
@@ -43,7 +47,7 @@ export function Ad({ data, index, showAvatar = true, ...props }: Props) {
       _pressed={{
         opacity: 0.8,
       }}
-      w="160.5px"
+      w={width / 2 - 34}
       overflow="hidden"
       onPress={navigateToAdDetails}
       {...props}
