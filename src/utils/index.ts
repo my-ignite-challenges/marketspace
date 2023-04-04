@@ -123,3 +123,18 @@ export function assignIconToPaymentMethods(methods: PaymentMethod[]) {
 
   return paymentMethodsWithIcons;
 }
+
+export const MyAdsFilters = [
+  {
+    key: "all",
+    name: "Todos",
+  },
+  {
+    key: "new",
+    name: "Novos",
+  },
+  {
+    key: "used",
+    name: "Usados",
+  },
+];
