@@ -40,7 +40,9 @@ export function AdImageSlider({ data, isPreview = false }: Props) {
                 w={width}
                 source={{
                   uri: isPreview
-                    ? item.uri
+                    ? data.id
+                      ? item.uri
+                      : `${api.defaults.baseURL}/images/${item.path}`
                     : `${api.defaults.baseURL}/images/${item.path}`,
                 }}
                 flex={1}

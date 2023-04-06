@@ -32,12 +32,12 @@ export function Ad({ data, index, showAvatar = true, ...props }: Props) {
 
   const { user } = useAuth();
 
-  const adIsActive = data?.user?.id === user.id ? data.is_active : true;
+  const adIsActive = data.user_id === user.id ? data.is_active : true;
 
   const width = Dimensions.get("screen").width;
 
   function navigateToAdDetails() {
-    navigate(`${data?.user?.id === user.id ? "MyAdDetails" : "AdDetails"}`, {
+    navigate(data?.user_id === user.id ? "MyAdDetails" : "AdDetails", {
       adId: data.id,
     });
   }

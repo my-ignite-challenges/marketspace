@@ -1,5 +1,14 @@
+import { useRoute } from "@react-navigation/native";
+
 import { AdForm } from "../components/AdForm";
 
+type RouteParams = {
+  adId: string;
+};
+
 export function EditAd() {
-  return <AdForm />;
+  const { params } = useRoute();
+  const { adId } = params as RouteParams;
+
+  return <AdForm adId={adId} />;
 }

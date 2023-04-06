@@ -1,4 +1,7 @@
-import { useTheme, VStack } from "native-base";
+import { useEffect, useState } from "react";
+
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { useTheme, useToast, VStack } from "native-base";
 import {
   ArrowLeft,
   PencilSimpleLine,
@@ -10,10 +13,53 @@ import { AdDetailsBody } from "../components/AdDetailsBody";
 import { Button } from "../components/Button";
 import { Header } from "../components/Header";
 
-export function MyAdDetails() {
-  const { colors } = useTheme();
+import { api } from "../services/api";
+import { AppError } from "../utils/AppError";
+import { AdProps } from "../@types";
+import { Loading } from "../components/Loading";
+import { AppStackNavigatorRoutes } from "../routes/app.routes";
 
-  const isAdActive = true;
+type RouteParams = {
+  adId: string;
+};
+
+export function MyAdDetails() {
+  const [adDataIsLoading, setAdDataIsLoading] = useState(false);
+  const [ad, setAd] = useState<AdProps>({} as AdProps);
+
+  const { navigate } = useNavigation<AppStackNavigatorRoutes>();
+  const { params } = useRoute();
+  const { adId } = params as RouteParams;
+  const { colors } = useTheme();
+  const toast = useToast();
+
+  async function fetchMyAdDetails() {
+    try {
+      setAdDataIsLoading(true);
+      const response = await api.get(`/products/${adId}`);
+      setAd(response.data);
+    } catch (error) {
+      toast.show({
+        title:
+          error instanceof AppError
+            ? error.message
+            : "Não foi possível carregar os dados do anúncio",
+        placement: "top",
+        bgColor: "red.500",
+      });
+    } finally {
+      setAdDataIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchMyAdDetails();
+  }, []);
+
+  if (adDataIsLoading) {
+    return <Loading />;
+  }
+
   return (
     <VStack bgColor="gray.200" flex={1}>
       <Header
@@ -21,14 +67,15 @@ export function MyAdDetails() {
         rightIcon={<PencilSimpleLine size={24} color={colors.gray[700]} />}
         px={6}
         mb={3}
+        onRightIconPress={() => navigate("EditAd", { adId: ad.id })}
       />
 
-      <AdDetailsBody />
+      <AdDetailsBody data={ad} />
       <VStack space={2} px={6} mt={4} mb={6}>
         <Button
-          title={isAdActive ? "Desativar anúncio" : "Reativar anúncio"}
+          title={ad.is_new ? "Desativar anúncio" : "Reativar anúncio"}
           icon={<Power color={colors.gray[200]} size={16} />}
-          bgColor={isAdActive ? "gray.700" : "blue.500"}
+          bgColor={ad.is_new ? "gray.700" : "blue.500"}
         />
         <Button
           title="Excluir anúncio"

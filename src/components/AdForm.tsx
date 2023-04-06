@@ -37,6 +37,8 @@ import {
 import { CheckboxGroup } from "./CheckboxGroup";
 import { RadioGroup } from "./RadioGroup";
 import { useAuth } from "../hooks/useAuth";
+import { Loading } from "./Loading";
+import { PaymentMethod, ProductImage } from "../@types";
 
 type ProductImagePickerProps = {
   uri?: string;
@@ -49,6 +51,10 @@ type ProductInputData = {
   price: number;
   payment_methods: string[];
   is_new: string;
+};
+
+type Props = {
+  adId?: string;
 };
 
 const MAX_NUMBER_OF_IMAGES = 3;
@@ -65,12 +71,11 @@ const adSchema = yup.object({
   is_new: yup.string().required("Informe se o produto é novo ou usado"),
 });
 
-export function AdForm() {
+export function AdForm({ adId }: Props) {
   const [selectedImages, setSelectedImages] = useState<any[]>([]);
   const [acceptsTrade, setAcceptsTrade] = useState(false);
   const [isSubmittingProductData, setIsSubmittingProductData] = useState(false);
-
-  const data = {} as any;
+  const [adDataIsLoading, setAdDataIsLoading] = useState(false);
 
   const { user } = useAuth();
   const { colors } = useTheme();
@@ -84,10 +89,40 @@ export function AdForm() {
     trigger,
     clearErrors,
     getValues,
+    reset,
     formState: { errors, isValid },
   } = useForm<ProductInputData>({
     resolver: yupResolver(adSchema),
   });
+
+  async function fetchAdDetails() {
+    try {
+      setAdDataIsLoading(true);
+      const response = await api.get(`/products/${adId}`);
+      setSelectedImages(response.data.product_images);
+      setAcceptsTrade(response.data.accept_trade);
+      reset({
+        name: response.data.name,
+        description: response.data.description,
+        is_new: response.data.is_new ? "new" : "used",
+        price: response.data.price,
+        payment_methods: response.data.payment_methods.map(
+          (item: PaymentMethod) => item.key
+        ),
+      });
+    } catch (error) {
+      toast.show({
+        title:
+          error instanceof AppError
+            ? error.message
+            : "Não foi possível carregar os dados do anúncio",
+        placement: "top",
+        bgColor: "red.500",
+      });
+    } finally {
+      setAdDataIsLoading(false);
+    }
+  }
 
   async function handleProductImagesSelection() {
     try {
@@ -128,11 +163,12 @@ export function AdForm() {
           type: `${selectedPhoto.assets[0].type}/${fileExtension}`,
         } as any;
 
-        if (selectedImages.length <= 2) {
+        if (selectedImages.length <= MAX_NUMBER_OF_IMAGES - 1) {
           setSelectedImages([...selectedImages, selectedPhotoFile]);
         }
       }
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -144,6 +180,8 @@ export function AdForm() {
 
     setSelectedImages(filteredSelectedImages);
   }
+
+  console.log("selectedImages: =>", selectedImages);
 
   function ProductImagePicker({ uri, imageIndex }: ProductImagePickerProps) {
     return (
@@ -187,7 +225,10 @@ export function AdForm() {
             position="absolute"
             top={1}
             right={1}
-            onPress={() => handleProductImageRemoval(imageIndex)}
+            onPress={() => {
+              handleProductImageRemoval(imageIndex);
+            }}
+            // disabled={!!adId}
             zIndex={2}
           >
             <X size={12} color={colors.gray[100]} />
@@ -207,14 +248,18 @@ export function AdForm() {
     try {
       setIsSubmittingProductData(true);
 
-      const response = await api.post("/products", {
+      const productData = {
         name,
         description,
         is_new: is_new === "new",
         price: Number(price),
         accept_trade: acceptsTrade,
         payment_methods,
-      });
+      };
+
+      const response = adId
+        ? await api.put(`/products/${adId}`, productData)
+        : await api.post("/products", productData);
 
       if (response.data && selectedImages.length > 0) {
         const productImagesFormData = new FormData();
@@ -222,7 +267,10 @@ export function AdForm() {
         selectedImages.forEach((image) => {
           productImagesFormData.append("images", image);
         });
-        productImagesFormData.append("product_id", response.data.id);
+        productImagesFormData.append(
+          "product_id",
+          adId ? adId : response.data.id
+        );
 
         await api.post("/products/images", productImagesFormData, {
           headers: {
@@ -232,7 +280,7 @@ export function AdForm() {
       }
 
       toast.show({
-        title: "Produto cadastrado com successo!",
+        title: `Produto ${adId ? "atualizado" : "cadastrado"} com successo!`,
         placement: "top",
         bgColor: "green.500",
       });
@@ -241,7 +289,9 @@ export function AdForm() {
         title:
           error instanceof AppError
             ? error.message
-            : "Não foi possível cadastrar o produto. Verifique os dados e tente novamente.",
+            : `Não foi possível ${
+                adId ? "atualizar os dados do" : "cadastrar o"
+              } produto. Verifique os dados e tente novamente.`,
         placement: "top",
         bgColor: "red.500",
       });
@@ -280,6 +330,12 @@ export function AdForm() {
   }
 
   useEffect(() => {
+    if (adId) {
+      fetchAdDetails();
+    }
+  }, []);
+
+  useEffect(() => {
     event.on("submitAdForm", handleSubmit(handleAdFormSubmission));
 
     return () => {
@@ -287,10 +343,14 @@ export function AdForm() {
     };
   }, [handleAdFormSubmission]);
 
+  if (adDataIsLoading) {
+    return <Loading />;
+  }
+
   return (
     <VStack bgColor="gray.200" flex={1}>
       <Header
-        title={data.id ? "Editar anúncio" : "Criar anúncio"}
+        title={adId ? "Editar anúncio" : "Criar anúncio"}
         leftIcon={<ArrowLeft color={colors.gray[700]} size={24} />}
         px={6}
       />
@@ -308,8 +368,14 @@ export function AdForm() {
           <HStack mt={4} w="full" space={2}>
             {selectedImages.map((image, index) => (
               <ProductImagePicker
-                uri={selectedImages[index]?.uri}
-                key={image.uri}
+                uri={
+                  /* adId
+                    ? `${api.defaults.baseURL}/images/${selectedImages[index]?.path}`
+                    : selectedImages[index]?.uri */
+                  selectedImages[index]?.uri ||
+                  `${api.defaults.baseURL}/images/${selectedImages[index]?.path}`
+                }
+                key={adId ? image.id : image.uri}
                 imageIndex={index}
               />
             ))}
