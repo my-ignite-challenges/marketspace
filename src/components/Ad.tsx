@@ -17,8 +17,6 @@ import { AppStackNavigatorRoutes } from "../routes/app.routes";
 import { api } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 
-import adImage from "../assets/bike.png";
-
 import { Dimensions } from "react-native";
 
 type Props = IPressableProps & {
@@ -55,13 +53,9 @@ export function Ad({ data, index, showAvatar = true, ...props }: Props) {
       <VStack>
         <Box w="full" position="relative" rounded="md">
           <Image
-            source={
-              data.product_images?.length
-                ? {
-                    uri: `${api.defaults.baseURL}/images/${data.product_images[0]?.path}`,
-                  }
-                : adImage
-            }
+            source={{
+              uri: `${api.defaults.baseURL}/images/${data.product_images[0]?.path}`,
+            }}
             alt="Imagem do Produto"
             w="full"
             h="100px"

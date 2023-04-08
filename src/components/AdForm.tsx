@@ -38,7 +38,7 @@ import { CheckboxGroup } from "./CheckboxGroup";
 import { RadioGroup } from "./RadioGroup";
 import { useAuth } from "../hooks/useAuth";
 import { Loading } from "./Loading";
-import { PaymentMethod, ProductImage } from "../@types";
+import { PaymentMethod } from "../@types";
 
 type ProductImagePickerProps = {
   uri?: string;
@@ -76,6 +76,9 @@ export function AdForm({ adId }: Props) {
   const [acceptsTrade, setAcceptsTrade] = useState(false);
   const [isSubmittingProductData, setIsSubmittingProductData] = useState(false);
   const [adDataIsLoading, setAdDataIsLoading] = useState(false);
+  const [latestRemovedImagesIds, setLatestRemovedImagesIds] = useState<
+    string[]
+  >([]);
 
   const { user } = useAuth();
   const { colors } = useTheme();
@@ -168,20 +171,28 @@ export function AdForm({ adId }: Props) {
         }
       }
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }
 
   function handleProductImageRemoval(imageIndex: number | undefined) {
+    const imageToBeRemoved = selectedImages.find(
+      (_, index) => index === imageIndex
+    );
+
+    if (!latestRemovedImagesIds.includes(imageToBeRemoved.id)) {
+      setLatestRemovedImagesIds([
+        ...latestRemovedImagesIds,
+        imageToBeRemoved.id,
+      ]);
+    }
+
     const filteredSelectedImages = selectedImages.filter(
       (_, index) => imageIndex !== index
     );
 
     setSelectedImages(filteredSelectedImages);
   }
-
-  console.log("selectedImages: =>", selectedImages);
 
   function ProductImagePicker({ uri, imageIndex }: ProductImagePickerProps) {
     return (
@@ -228,7 +239,6 @@ export function AdForm({ adId }: Props) {
             onPress={() => {
               handleProductImageRemoval(imageIndex);
             }}
-            // disabled={!!adId}
             zIndex={2}
           >
             <X size={12} color={colors.gray[100]} />
@@ -236,6 +246,40 @@ export function AdForm({ adId }: Props) {
         )}
       </Pressable>
     );
+  }
+
+  async function handleProductImagesUpdate() {
+    try {
+      const productImagesFormData = new FormData();
+
+      selectedImages.forEach((image) => {
+        if (image.type) {
+          productImagesFormData.append("images", image);
+        }
+      });
+      productImagesFormData.append("product_id", adId!);
+
+      await api.delete("/products/images", {
+        data: {
+          productImagesIds: latestRemovedImagesIds,
+        },
+      });
+
+      await api.post("/products/images", productImagesFormData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      toast.show({
+        title:
+          error instanceof AppError
+            ? error.message
+            : "Não foi possível atualizar as imagens do produto",
+        placement: "top",
+        bgColor: "red.500",
+      });
+    }
   }
 
   async function handleAdFormSubmission({
@@ -278,6 +322,8 @@ export function AdForm({ adId }: Props) {
           },
         });
       }
+
+      adId && handleProductImagesUpdate();
 
       toast.show({
         title: `Produto ${adId ? "atualizado" : "cadastrado"} com successo!`,
@@ -369,13 +415,10 @@ export function AdForm({ adId }: Props) {
             {selectedImages.map((image, index) => (
               <ProductImagePicker
                 uri={
-                  /* adId
-                    ? `${api.defaults.baseURL}/images/${selectedImages[index]?.path}`
-                    : selectedImages[index]?.uri */
                   selectedImages[index]?.uri ||
                   `${api.defaults.baseURL}/images/${selectedImages[index]?.path}`
                 }
-                key={adId ? image.id : image.uri}
+                key={adId ? image.id : image.uri + index}
                 imageIndex={index}
               />
             ))}

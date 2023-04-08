@@ -27,7 +27,7 @@ export function AdImageSlider({ data, isPreview = false }: Props) {
 
   return (
     <GestureHandlerRootView style={{ position: "relative" }}>
-      {data.product_images?.length > 1 ? (
+      {data?.product_images?.length > 1 ? (
         <Carousel
           width={width}
           height={280}
@@ -39,11 +39,8 @@ export function AdImageSlider({ data, isPreview = false }: Props) {
               <Image
                 w={width}
                 source={{
-                  uri: isPreview
-                    ? data.id
-                      ? item.uri
-                      : `${api.defaults.baseURL}/images/${item.path}`
-                    : `${api.defaults.baseURL}/images/${item.path}`,
+                  uri:
+                    item.uri || `${api.defaults.baseURL}/images/${item.path}`,
                 }}
                 flex={1}
                 resizeMode="cover"
@@ -65,8 +62,10 @@ export function AdImageSlider({ data, isPreview = false }: Props) {
             w={width}
             source={{
               uri:
-                data?.product_images &&
-                `${api.defaults.baseURL}/images/${data?.product_images[0]?.path}`,
+                data.product_images &&
+                (data.product_images[0].path
+                  ? `${api.defaults.baseURL}/images/${data?.product_images[0]?.path}`
+                  : data.product_images[0].uri),
             }}
             flex={1}
             resizeMode="cover"
