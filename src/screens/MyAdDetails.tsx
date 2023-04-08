@@ -24,7 +24,9 @@ type RouteParams = {
 };
 
 export function MyAdDetails() {
-  const [adDataIsLoading, setAdDataIsLoading] = useState(false);
+  const [adDataisLoading, setAdDataIsLoading] = useState(false);
+  const [isDeactivating, setIsDeactivating] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
   const [ad, setAd] = useState<AdProps>({} as AdProps);
 
   const { navigate } = useNavigation<AppStackNavigatorRoutes>();
@@ -52,11 +54,38 @@ export function MyAdDetails() {
     }
   }
 
+  async function handleMarkAdAsActiveOrInactive() {
+    try {
+      setIsDeactivating(true);
+      await api.patch(`/products/${ad.id}`, {
+        is_active: !ad.is_active,
+      });
+
+      toast.show({
+        title: "Anúncio desativado com sucesso!",
+        placement: "top",
+        bgColor: "green.500",
+      });
+      navigate("HomeTabs");
+    } catch (error) {
+      toast.show({
+        title:
+          error instanceof AppError
+            ? error.message
+            : "Não foi possível desativar o anúncio. Tente novamente mais tarde.",
+        placement: "top",
+        bgColor: "red.500",
+      });
+    } finally {
+      setIsDeactivating(false);
+    }
+  }
+
   useEffect(() => {
     fetchMyAdDetails();
   }, []);
 
-  if (adDataIsLoading) {
+  if (adDataisLoading) {
     return <Loading />;
   }
 
@@ -73,15 +102,19 @@ export function MyAdDetails() {
       <AdDetailsBody data={ad} />
       <VStack space={2} px={6} mt={4} mb={6}>
         <Button
-          title={ad.is_new ? "Desativar anúncio" : "Reativar anúncio"}
+          title={ad.is_active ? "Desativar anúncio" : "Reativar anúncio"}
           icon={<Power color={colors.gray[200]} size={16} />}
-          bgColor={ad.is_new ? "gray.700" : "blue.500"}
+          bgColor={ad.is_active ? "gray.700" : "blue.500"}
+          isLoading={isDeactivating}
+          onPress={handleMarkAdAsActiveOrInactive}
         />
         <Button
           title="Excluir anúncio"
           icon={<TrashSimple color={colors.gray[600]} size={16} />}
           bgColor="gray.300"
           textColor="gray.600"
+          isLoading={isRemoving}
+          onPress={handleMarkAdAsActiveOrInactive}
         />
       </VStack>
     </VStack>

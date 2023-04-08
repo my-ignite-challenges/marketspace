@@ -109,7 +109,9 @@ export function Ad({ data, index, showAvatar = true, ...props }: Props) {
           )}
         </Box>
         <VStack w="full" mt={1}>
-          <Text color={adIsActive ? "gray.600" : "gray.400"}>{data.name}</Text>
+          <Text color={adIsActive ? "gray.600" : "gray.400"} isTruncated>
+            {data.name}
+          </Text>
           <HStack alignItems="center" space={1}>
             <Text
               color={adIsActive ? "gray.700" : "gray.400"}

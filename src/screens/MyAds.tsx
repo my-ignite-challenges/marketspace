@@ -126,7 +126,7 @@ export function MyAds() {
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={() => (
           <Text color="gray.600" textAlign="center" fontFamily="heading">
-            Você ainda não publicou anúncios.
+            Nenhum anúncio encontrado.
           </Text>
         )}
       />

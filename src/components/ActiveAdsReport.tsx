@@ -26,6 +26,8 @@ type Props = {
 export function ActiveAdsReport({ data }: Props) {
   const { navigate } = useNavigation<AppBottomTabNavigatorRoutes>();
 
+  const activeAds: AdProps[] = data.filter((item) => item.is_active);
+
   return (
     <VStack w="full" my={8}>
       <Text color="gray.500">Seus produtos anunciados para venda</Text>
@@ -44,10 +46,10 @@ export function ActiveAdsReport({ data }: Props) {
         <Image source={TagImage} alt="Imagem de Etiqueta" w="22px" h="22px" />
         <VStack ml={4}>
           <Text color="gray.600" fontSize="xl" fontFamily="heading">
-            {data.length}
+            {activeAds.length}
           </Text>
           <Text color="gray.600" fontSize="xs">
-            {data.length > 1 ? "anúncios ativos" : "anúncio ativo"}
+            {activeAds.length > 1 ? "anúncios ativos" : "anúncio ativo"}
           </Text>
         </VStack>
 
@@ -66,7 +68,7 @@ export function ActiveAdsReport({ data }: Props) {
       </Box>
 
       <FlatList
-        data={data}
+        data={activeAds}
         keyExtractor={(item) => item.id}
         renderItem={({ item, index }) => (
           <Ad
