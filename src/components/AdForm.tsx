@@ -96,6 +96,10 @@ export function AdForm({ adId }: Props) {
     formState: { errors, isValid },
   } = useForm<ProductInputData>({
     resolver: yupResolver(adSchema),
+    defaultValues: {
+      is_new: "new",
+      payment_methods: [],
+    },
   });
 
   async function fetchAdDetails() {
@@ -305,16 +309,13 @@ export function AdForm({ adId }: Props) {
         ? await api.put(`/products/${adId}`, productData)
         : await api.post("/products", productData);
 
-      if (response.data && selectedImages.length > 0) {
+      if (!adId && response.data && selectedImages.length > 0) {
         const productImagesFormData = new FormData();
 
         selectedImages.forEach((image) => {
           productImagesFormData.append("images", image);
         });
-        productImagesFormData.append(
-          "product_id",
-          adId ? adId : response.data.id
-        );
+        productImagesFormData.append("product_id", response.data.id);
 
         await api.post("/products/images", productImagesFormData, {
           headers: {
@@ -323,7 +324,7 @@ export function AdForm({ adId }: Props) {
         });
       }
 
-      adId && handleProductImagesUpdate();
+      adId && latestRemovedImagesIds.length > 0 && handleProductImagesUpdate();
 
       toast.show({
         title: `Produto ${adId ? "atualizado" : "cadastrado"} com successo!`,
