@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { Text, useToast, VStack } from "native-base";
 
@@ -12,6 +12,7 @@ import { api } from "../services/api";
 import { AppError } from "../utils/AppError";
 import { Filter } from "../components/Filter";
 import { Loading } from "../components/Loading";
+import { useFocusEffect } from "@react-navigation/native";
 
 export type Filters = {
   is_new?: string;
@@ -78,19 +79,25 @@ export function Home() {
     }
   }
 
-  useEffect(() => {
-    fetchLoggedUserAds();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchLoggedUserAds();
+    }, [])
+  );
 
-  useEffect(() => {
-    if (hasFilters) {
-      setFilters({} as Filters);
-    }
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      if (hasFilters) {
+        setFilters({} as Filters);
+      }
+    }, [])
+  );
 
-  useEffect(() => {
-    fetchAds();
-  }, [filters]);
+  useFocusEffect(
+    useCallback(() => {
+      fetchAds();
+    }, [filters])
+  );
 
   return (
     <>

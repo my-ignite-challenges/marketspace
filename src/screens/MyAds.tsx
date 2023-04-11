@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
   FlatList,
   HStack,
@@ -12,8 +12,9 @@ import {
 } from "native-base";
 import { CaretDown, Plus } from "phosphor-react-native";
 
-import { Header } from "../components/Header";
 import { Ad } from "../components/Ad";
+import { Header } from "../components/Header";
+import { Loading } from "../components/Loading";
 
 import { AppStackNavigatorRoutes } from "../routes/app.routes";
 import { AdProps } from "../@types";
@@ -24,6 +25,7 @@ import { MyAdsFilters } from "../utils";
 export function MyAds() {
   const [selectedAdFilter, setSelectedAdFilter] = useState("all");
   const [ads, setAds] = useState<AdProps[]>([]);
+  const [dataIsLoading, setDataIsLoading] = useState(false);
 
   const { navigate } = useNavigation<AppStackNavigatorRoutes>();
   const { colors } = useTheme();
@@ -34,6 +36,7 @@ export function MyAds() {
 
   async function fetchMyAds() {
     try {
+      setDataIsLoading(true);
       const response = await api.get("/users/products");
 
       const adsWithNewProducts = response.data.filter(
@@ -60,12 +63,16 @@ export function MyAds() {
         placement: "top",
         bgColor: "red.500",
       });
+    } finally {
+      setDataIsLoading(false);
     }
   }
 
-  useEffect(() => {
-    fetchMyAds();
-  }, [selectedAdFilter]);
+  useFocusEffect(
+    useCallback(() => {
+      fetchMyAds();
+    }, [selectedAdFilter])
+  );
 
   return (
     <VStack bgColor="gray.200" flex={1} px={6}>
@@ -107,29 +114,33 @@ export function MyAds() {
         </Select>
       </HStack>
 
-      <FlatList
-        key={numberOfColumns}
-        data={ads}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item, index }) => (
-          <Ad
-            data={item}
-            index={index}
-            showAvatar={false}
-            mr={index < ads.length - 1 ? 5 : 0}
-          />
-        )}
-        numColumns={numberOfColumns}
-        _contentContainerStyle={{
-          paddingBottom: 10,
-        }}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={() => (
-          <Text color="gray.600" textAlign="center" fontFamily="heading">
-            Nenhum anúncio encontrado.
-          </Text>
-        )}
-      />
+      {dataIsLoading ? (
+        <Loading />
+      ) : (
+        <FlatList
+          key={numberOfColumns}
+          data={ads}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item, index }) => (
+            <Ad
+              data={item}
+              index={index}
+              showAvatar={false}
+              mr={index < ads.length - 1 ? 5 : 0}
+            />
+          )}
+          numColumns={numberOfColumns}
+          _contentContainerStyle={{
+            paddingBottom: 10,
+          }}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={() => (
+            <Text color="gray.600" textAlign="center" fontFamily="heading">
+              Nenhum anúncio encontrado.
+            </Text>
+          )}
+        />
+      )}
     </VStack>
   );
 }
