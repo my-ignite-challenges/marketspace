@@ -1,6 +1,7 @@
 import {
   Divider,
   HStack,
+  IInputProps,
   Image,
   Pressable,
   Spinner,
@@ -17,7 +18,7 @@ import { AppError } from "../utils/AppError";
 import FilterIcon from "../assets/filter-icon.png";
 import { useState } from "react";
 
-type Props = {
+type Props = IInputProps & {
   setShowFilter: (value: boolean) => void;
   setSearchTerm: (value: string) => void;
   setAds: (value: AdProps[]) => void;
@@ -67,6 +68,7 @@ export function Search({
   searchTerm,
   setSearchTerm,
   setAds,
+  ...props
 }: Props) {
   const [isSearching, setIsSearching] = useState(false);
 
@@ -110,6 +112,7 @@ export function Search({
       value={searchTerm}
       onChangeText={setSearchTerm}
       onSubmitEditing={handleSearch}
+      {...props}
     />
   );
 }
