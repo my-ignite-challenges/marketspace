@@ -27,8 +27,8 @@ export function AdList({ data }: Props) {
         ListEmptyComponent={() => (
           <Text color="gray.600" textAlign="center" fontFamily="heading">
             {data.length > 0
-              ? "Nenhum anúncio corresponde aos filtros aplicados"
-              : "Nenhum anúncio cadastrado"}
+              ? "Nenhum anúncio até o momento."
+              : "Nenhum anúncio correspondente à sua busca."}
           </Text>
         )}
       />
