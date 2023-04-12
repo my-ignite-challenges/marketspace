@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Platform } from "react-native";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from "@react-navigation/native";
@@ -224,7 +225,7 @@ export function AdForm({ adId }: Props) {
             position="absolute"
             top={0}
             left={0}
-            resizeMode="contain"
+            resizeMode={Platform.OS === "ios" ? "cover" : "contain"}
             borderRadius="6px"
           />
         )}

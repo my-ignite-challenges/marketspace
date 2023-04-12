@@ -17,7 +17,7 @@ import { AppStackNavigatorRoutes } from "../routes/app.routes";
 import { api } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 
 type Props = IPressableProps & {
   data: AdProps;
@@ -59,7 +59,7 @@ export function Ad({ data, index, showAvatar = true, ...props }: Props) {
             alt="Imagem do Produto"
             w="full"
             h="100px"
-            resizeMode="contain"
+            resizeMode={Platform.OS === "ios" ? "cover" : "contain"}
             rounded="md"
           />
           {showAvatar && (
