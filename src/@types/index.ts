@@ -23,6 +23,7 @@ export type AdProps = {
     id: string;
     avatar: string;
     name: string;
+    tel: string;
   };
 };
 
