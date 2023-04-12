@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import { Text, useToast, VStack } from "native-base";
+import { ScrollView, Text, useToast, VStack } from "native-base";
 
 import { ActiveAdsReport } from "../components/ActiveAdsReport";
 import { AdList } from "../components/AdList";
@@ -101,18 +101,26 @@ export function Home() {
 
   return (
     <>
-      <VStack flex={1} px={6} bgColor="gray.200">
-        <HomeHeader />
-        {loggedUserAds.length > 0 && <ActiveAdsReport data={loggedUserAds} />}
-        <VStack mt={!ads.length || !loggedUserAds.length ? 8 : 0}>
-          <Text color="gray.500">Compre produtos variados</Text>
-          <Search
-            setShowFilter={setShowFilter}
-            setSearchTerm={setSearchTerm}
-            searchTerm={searchTerm}
-            setAds={setAds}
-          />
-        </VStack>
+      <VStack bgColor="gray.200">
+        <ScrollView px={6}>
+          <VStack flex={1}>
+            <HomeHeader />
+            {loggedUserAds.length > 0 && (
+              <ActiveAdsReport data={loggedUserAds} />
+            )}
+            <VStack mt={!ads.length || !loggedUserAds.length ? 8 : 0}>
+              <Text color="gray.500">Compre produtos variados</Text>
+              <Search
+                setShowFilter={setShowFilter}
+                setSearchTerm={setSearchTerm}
+                searchTerm={searchTerm}
+                setAds={setAds}
+              />
+            </VStack>
+          </VStack>
+        </ScrollView>
+      </VStack>
+      <VStack flex={1} px={6}>
         {adListIsLoading ? <Loading /> : <AdList data={ads} />}
       </VStack>
       {showFilter && (
