@@ -81,6 +81,31 @@ export function MyAdDetails() {
     }
   }
 
+  async function handleAdDeletion() {
+    try {
+      setIsRemoving(true);
+      await api.delete(`/products/${ad.id}`);
+      toast.show({
+        title: "Anúncio excluído com sucesso.",
+        placement: "top",
+        bgColor: "green.500",
+      });
+
+      navigate("HomeTabs");
+    } catch (error) {
+      toast.show({
+        title:
+          error instanceof AppError
+            ? error.message
+            : "Não foi possível excluir o anúncio. Tente novamente mais tarde.",
+        placement: "top",
+        bgColor: "red.500",
+      });
+    } finally {
+      setIsRemoving(false);
+    }
+  }
+
   useEffect(() => {
     fetchMyAdDetails();
   }, []);
@@ -114,7 +139,7 @@ export function MyAdDetails() {
           bgColor="gray.300"
           textColor="gray.600"
           isLoading={isRemoving}
-          onPress={handleMarkAdAsActiveOrInactive}
+          onPress={handleAdDeletion}
         />
       </VStack>
     </VStack>
